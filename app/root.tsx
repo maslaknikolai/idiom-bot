@@ -40,11 +40,6 @@ export const loader = async ({
   });
 };
 
-export const action = async () => {
-  const contact = await createEmptyContact();
-  return json({ contact });
-};
-
 export default function App() {
   const navigation = useNavigation();
   const { contacts, q, userName } = useLoaderData<typeof loader>();
@@ -112,9 +107,9 @@ export default function App() {
                 hidden={!searching}
               />
             </Form>
-            <Form method="post">
-              <button type="submit">New</button>
-            </Form>
+            <Link to="/contacts/create">
+              <button type="button">New</button>
+            </Link>
           </div>
           <nav>
             {contacts.length ? (
