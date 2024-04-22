@@ -4,10 +4,16 @@ import { Form, useLoaderData, useNavigate } from "@remix-run/react";
 import invariant from "tiny-invariant";
 
 import { getContact, updateContact } from "../data";
+import { requireAuthentication } from "../utils/auth";
 
 export const loader = async ({
   params,
+  request,
 }: LoaderFunctionArgs) => {
+  const r = await requireAuthentication(request);
+  if (r) {
+    return r;
+  }
   invariant(params.contactId, "Missing contactId param");
   const contact = await getContact(params.contactId);
   if (!contact) {

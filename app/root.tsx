@@ -1,5 +1,6 @@
 import {
   Form,
+  Link,
   Links,
   Meta,
   NavLink,
@@ -15,6 +16,7 @@ import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import appStylesHref from "./app.css?url";
 import { createEmptyContact, getContacts } from "./data";
 import { useEffect, useState } from "react";
+import { getSession } from "./sessions";
 
 
 export const links: LinksFunction = () => [
@@ -27,7 +29,15 @@ export const loader = async ({
   const url = new URL(request.url);
   const q = url.searchParams.get("q");
   const contacts = await getContacts(q);
-  return json({ contacts, q });
+
+  const session = await getSession(request.headers.get("Cookie"));
+  const userName = session.get("userId") ? "Admin" : "Guest";
+
+  return json({
+    contacts,
+    q,
+    userName
+  });
 };
 
 export const action = async () => {
@@ -37,7 +47,7 @@ export const action = async () => {
 
 export default function App() {
   const navigation = useNavigation();
-  const { contacts, q } = useLoaderData<typeof loader>();
+  const { contacts, q, userName } = useLoaderData<typeof loader>();
   const submit = useSubmit();
 
   const searching =
@@ -63,7 +73,16 @@ export default function App() {
       </head>
       <body>
         <div id="sidebar">
-          <h1>Remix Contacts</h1>
+          <div>
+            {userName}
+            {userName === "Guest" ? (
+              <Link to="/login">Login</Link>
+            ) : (
+              <Form method="post" action="/logout">
+                <button type="submit">Logout</button>
+              </Form>
+            )}
+          </div>
           <div>
             <Form
               id="search-form"

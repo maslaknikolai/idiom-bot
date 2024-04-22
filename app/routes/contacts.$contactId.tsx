@@ -4,9 +4,17 @@ import type { FunctionComponent } from "react";
 import { getContact, updateContact, type ContactRecord } from "../data";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import invariant from "tiny-invariant";
+import { requireAuthentication } from "../utils/auth";
 
 
-export const loader = async ({ params }: LoaderFunctionArgs) => {
+export const loader = async ({
+  params,
+  request,
+}: LoaderFunctionArgs) => {
+  const r = await requireAuthentication(request);
+  if (r) {
+    return r;
+  }
   invariant(params.contactId, "Missing contactId param");
   const contact = await getContact(params.contactId);
   if (!contact) {
