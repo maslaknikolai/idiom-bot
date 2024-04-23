@@ -34,7 +34,7 @@ async function main() {
     const startUrl = `${miniAppUrl}?startapp=${ctx.update.message.chat.id}`;
 
     ctx.replyWithHTML(
-      `Отлично! Теперь вы в игре. Чтобы играть нажмите на <a href="${startUrl}">Играть</a>`,
+      `Отлично! Теперь вы в игре. <a href="${startUrl}">Играть</a>`,
     )
   });
 
