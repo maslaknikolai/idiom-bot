@@ -4,9 +4,9 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "dev": "nodemon --exec ts-node index.ts",
     "build": "ls",
-    "start": "ts-node index.ts",
-    "dev": "nodemon --exec ts-node index.ts"
+    "start": "ts-node index.ts"
   },
   "dependencies": {
     "node-telegram-bot-api": "^0.65.1"
