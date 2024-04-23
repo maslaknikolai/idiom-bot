@@ -1,8 +1,7 @@
 export const loader = async () => {
-  console.log('MY WEBHOOK', process.env.INTERNAL_API_URL + ':5045/webhook/message');
+  fetch(`http://localhost:${process.env.BOT_WEBHOOK_PORT}/webhook/message`)
+    .catch(() => {})
 
-  fetch('http://localhost:5045/webhook/message')
-  .catch(() => {})
   return null
 };
 

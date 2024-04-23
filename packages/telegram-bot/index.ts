@@ -10,6 +10,7 @@ dotenv.config({ path: '../../.env' });
 const token = process.env.TELEGRAM_BOT_TOKEN || '';
 const adminChatId = process.env.ADMIN_TELEGRAM_ID;
 const miniAppUrl = process.env.MINI_APP_URL || '';
+const botWebhookPort = process.env.BOT_WEBHOOK_PORT || 5045;
 
 const addedToGroupText = `🎉 Привет, всем! Это игра для изучения английских идиом.
 Каждый день мы угадываем новую идиому и получаем за это очки. В конце недели объявляется победитель.
@@ -61,10 +62,9 @@ async function main() {
     logToAdmin(`Received webhook message: ${JSON.stringify(req.body)}`);
   });
 
-  app.listen(5045, () => {
-    console.log(`Server running on http://localhost:${5045}`);
+  app.listen(botWebhookPort, () => {
+    console.log(`Server running on http://localhost:${botWebhookPort}`);
   });
-
 }
 
 async function onRemoveFromGroup(ctx: NarrowedContext<Context<Update>, Update.MyChatMemberUpdate>) {
