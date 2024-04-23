@@ -14,10 +14,13 @@ import {
 import { json } from "@remix-run/node";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import appStylesHref from "./app.css?url";
-import { createEmptyContact, getContacts } from "./data";
 import { useEffect, useState } from "react";
 import { getSession } from "./sessions";
 
+import dotenv from 'dotenv';
+import { connectToDatabase } from "mongooseDB";
+import { ChatModel } from "models/chat";
+dotenv.config();
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: appStylesHref },
@@ -26,23 +29,30 @@ export const links: LinksFunction = () => [
 export const loader = async ({
   request,
 }: LoaderFunctionArgs) => {
+  await connectToDatabase()
+  const rawChats = await ChatModel.find()
+
   const url = new URL(request.url);
   const q = url.searchParams.get("q");
-  const contacts = await getContacts(q);
 
   const session = await getSession(request.headers.get("Cookie"));
   const userName = session.get("userId") ? "Admin" : "Guest";
 
+  const chats = rawChats.map(it => ({
+    id: it.id,
+    name: it.name,
+  }))
+
   return json({
-    contacts,
     q,
+    chats,
     userName
   });
 };
 
 export default function App() {
   const navigation = useNavigation();
-  const { contacts, q, userName } = useLoaderData<typeof loader>();
+  const { q, userName, chats } = useLoaderData<typeof loader>();
   const submit = useSubmit();
 
   const searching =
@@ -96,7 +106,7 @@ export default function App() {
                 }
                 id="q"
                 className={searching ? "loading" : ""}
-                aria-label="Search contacts"
+                aria-label="Search chats"
                 placeholder="Search"
                 type="search"
                 name="q"
@@ -107,15 +117,15 @@ export default function App() {
                 hidden={!searching}
               />
             </Form>
-            <Link to="/contacts/create">
+            <Link to="/chats/create">
               <button type="button">New</button>
             </Link>
           </div>
           <nav>
-            {contacts.length ? (
+            {chats.length ? (
               <ul>
-                {contacts.map((contact) => (
-                  <li key={contact.id}>
+                {chats.map((chat) => (
+                  <li key={chat.id}>
                     <NavLink
                       className={({ isActive, isPending }) =>
                         isActive
@@ -124,26 +134,16 @@ export default function App() {
                           ? "pending"
                           : ""
                       }
-                      to={`contacts/${contact.id}`}
+                      to={`chats/${chat.id}`}
                     >
-                      {contact.first || contact.last ? (
-                        <>
-                          {contact.first} {contact.last}
-                        </>
-                      ) : (
-                        <i>No Name</i>
-                      )}
-                      {" "}
-                      {contact.favorite ? (
-                        <span>★</span>
-                      ) : null}
+                      {chat.name}
                     </NavLink>
                   </li>
                 ))}
               </ul>
             ) : (
               <p>
-                <i>No contacts</i>
+                <i>No chats</i>
               </p>
             )}
           </nav>

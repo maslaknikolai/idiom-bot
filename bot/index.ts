@@ -1,29 +1,45 @@
-// Import required packages
-const { Telegraf } = require('telegraf');
-const mongoose = require('mongoose');
-const cron = require('node-cron');
+import TelegramBot from 'node-telegram-bot-api';
+import dotenv from 'dotenv';
+import fs from 'fs';
+import { connectToDatabase } from '../mongooseDB';
+dotenv.config();
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/idiomBot', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
 
-// Initialize the bot
-const bot = new Telegraf(process.env.BOT_TOKEN);
+(async () => {
+  connectToDatabase();
+  const token = process.env.TELEGRAM_BOT_TOKEN || '';
 
-// Start command
-bot.start((ctx) => {
-  ctx.reply('Welcome! Ready to learn some idioms?');
-  // Additional code to register user
-});
+  const bot = new TelegramBot(token, { polling: true });
 
-// Setup cron job for daily tasks
-cron.schedule('0 0 * * *', () => {
-  // Send daily updates and results
-});
+  bot.on('message', (msg) => {
+    console.log(msg);
 
-// Start bot
-bot.launch();
+    const chatId = msg.chat.id;
 
-// Setup Express server for webhook (if
+    if (msg.text === '/start') {
+      bot.sendMessage(chatId, "Welcome! I am your friendly bot. How can I assist you today?");
+    } else {
+      bot.sendMessage(chatId, `You said: ${msg.text}`);
+    }
+  });
+
+  bot.on('my_chat_member', (msg) => {
+    console.log(msg);
+
+    fs.writeFileSync('my_chat_member.log', JSON.stringify(msg))
+
+    const chatId = msg.chat.id;
+    if (msg.new_chat_member.status === 'member') {
+      console.log(`Added to group: ${chatId}`);
+      bot.sendMessage(chatId, "Hello everyone! I'm here to help.");
+    } else if (msg.new_chat_member.status === 'left') {
+      console.log(`Removed from group: ${chatId}`);
+    }
+  });
+
+  bot.on('polling_error', (error) => {
+    console.log('Polling error', error);
+  });
+
+  console.log('Bot has been started...');
+})()

@@ -13,7 +13,7 @@ export const action = async ({
   if (r) {
     return r;
   }
-  invariant(params.contactId, "Missing contactId param");
-  await deleteContact(params.contactId);
+  invariant(params.chatId, "Missing chatId param");
+  await deleteContact(params.chatId);
   return redirect("/");
 };

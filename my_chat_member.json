@@ -1,0 +1,34 @@
+{
+  "chat": {
+    "id": -4175589849,
+    "title": "My test group",
+    "type": "group",
+    "all_members_are_administrators": true
+  },
+  "from": {
+    "id": 734712562,
+    "is_bot": false,
+    "first_name": "Nikolai",
+    "username": "imadeniko",
+    "language_code": "ru"
+  },
+  "date": 1713872528,
+  "old_chat_member": {
+    "user": {
+      "id": 6478906765,
+      "is_bot": true,
+      "first_name": "bot_idiot",
+      "username": "idiom_game_bot"
+    },
+    "status": "left"
+  },
+  "new_chat_member": {
+    "user": {
+      "id": 6478906765,
+      "is_bot": true,
+      "first_name": "bot_idiot",
+      "username": "idiom_game_bot"
+    },
+    "status": "member"
+  }
+}

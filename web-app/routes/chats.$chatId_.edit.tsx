@@ -15,8 +15,8 @@ export const loader = async ({
   if (r) {
     return r;
   }
-  invariant(params.contactId, "Missing contactId param");
-  const contact = await getContact(params.contactId);
+  invariant(params.chatId, "Missing chatId param");
+  const contact = await getContact(params.chatId);
   if (!contact) {
     throw new Response("Not Found", { status: 404 });
   }
@@ -27,11 +27,11 @@ export const action = async ({
     params,
     request,
   }: ActionFunctionArgs) => {
-    invariant(params.contactId, "Missing contactId param");
+    invariant(params.chatId, "Missing chatId param");
     const formData = await request.formData();
     const updates = Object.fromEntries(formData);
-    await updateContact(params.contactId, updates);
-    return redirect(`/contacts/${params.contactId}`);
+    await updateContact(params.chatId, updates);
+    return redirect(`/chats/${params.chatId}`);
   };
 
 export default function EditContact() {

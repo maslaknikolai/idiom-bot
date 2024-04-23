@@ -1,11 +1,13 @@
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form } from "@remix-run/react";
-import invariant from "tiny-invariant";
 
 import { createEmptyContact, updateContact } from "../data";
 import { requireAuthentication } from "../utils/auth";
 import ContactForm from "~/components/ContactForm";
+import { connectToDatabase } from "mongooseDB";
+import { ChatModel } from "models/chat";
+import mongoose from "mongoose";
 
 
 export const loader = async ({
@@ -19,17 +21,34 @@ export const loader = async ({
 };
 
 export const action = async ({
-    params,
     request,
   }: ActionFunctionArgs) => {
-    invariant(params.contactId, "Missing contactId param");
+    await connectToDatabase();
+    const chat = new ChatModel({
+      id: 'unique_chat_id',
+      players: [
+        {
+          id: new mongoose.Types.ObjectId(),
+          name: 'Иван'
+        },
+        {
+          id: new mongoose.Types.ObjectId(),
+          name: 'Мария'
+        }
+      ],
+      games: []
+    });
+
+    await chat.save();
+    console.log(chat);
+
     const formData = await request.formData();
     const updates = Object.fromEntries(formData);
 
     const contact = await createEmptyContact();
     await updateContact(contact.id, updates);
 
-    return redirect(`/contacts/${params.contactId}`);
+    return redirect(`/`);
   };
 
 export default function EditContact() {

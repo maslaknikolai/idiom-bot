@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "target": "ESNext",
+    "esModuleInterop": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "outDir": "./dist/bot",
+    "removeComments": true,
+    "noEmitOnError": true,
+    "moduleResolution": "NodeNext"
+  },
+  "include": [
+    "bot/**/*.ts",
+    "models/**/*.ts",
+    "mongooseDB.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
