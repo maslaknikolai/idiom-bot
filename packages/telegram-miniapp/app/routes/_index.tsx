@@ -10,7 +10,7 @@ export const loader = async () => {
 export default function Index() {
   return (
     <div>
-      Игра
+      Супер Игра
     </div>
   );
 }
