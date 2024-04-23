@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 
+// hack to make it work
+// eslint-disable-next-line
+import * as no from 'telegram-webapps'
+
 export default function Index() {
-  // eslint-disable-next-line
-  const [someshit, setSomeshit] = useState<any>({})
+  const [someshit, setSomeshit] = useState<Record<string, unknown>>({})
+
   useEffect(() => {
     if (window) {
-      // eslint-disable-next-line
-      // @ts-ignore
-      const raw = window.Telegram.WebApp.initData;
+      const raw = Telegram.WebApp.initData;
       const split = raw.split('&')
-      // eslint-disable-next-line
-      const data = split.reduce((acc: any, item: string) => {
+      const data = split.reduce((acc: Record<string, string>, item: string) => {
         const [key, value] = item.split('=')
         acc[key] = value
         return acc

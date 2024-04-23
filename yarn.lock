@@ -8355,6 +8355,7 @@ __metadata:
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     sort-by: "npm:^1.2.0"
+    telegram-webapps: "npm:^7.2.0"
     tiny-invariant: "npm:^1.3.1"
     ts-node: "npm:^10.9.2"
     tsc-watch: "npm:^6.2.0"
@@ -8363,6 +8364,13 @@ __metadata:
     vite-tsconfig-paths: "npm:^4.3.1"
   languageName: unknown
   linkType: soft
+
+"telegram-webapps@npm:^7.2.0":
+  version: 7.2.0
+  resolution: "telegram-webapps@npm:7.2.0"
+  checksum: 10c0/bde3e243ed96767af0a7dc1570cb7d9ff93f631543bfb4f32e82049a5ab3be26344a3117f8fc25aed5f1bb20a48fa320e282ddf1b0ac184e259c3329dfa3cbd8
+  languageName: node
+  linkType: hard
 
 "text-table@npm:^0.2.0":
   version: 0.2.0
