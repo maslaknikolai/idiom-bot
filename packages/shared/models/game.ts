@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import { playerResultSchema } from './playerResult';
 import { Document } from 'mongoose';
 
-export interface Game extends Document {
+export interface Game {
   date: Date;
   idiom_id: mongoose.Schema.Types.ObjectId;
   players_results: typeof playerResultSchema[];
