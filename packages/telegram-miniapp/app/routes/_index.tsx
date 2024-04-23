@@ -5,31 +5,34 @@ import { useEffect, useState } from "react";
 import * as no from 'telegram-webapps'
 
 export default function Index() {
-  const [someshit, setSomeshit] = useState<Record<string, unknown>>({})
+  const [userId, setUserId] = useState<number | undefined>(undefined)
+  const [groupChatId, setGroupChatId] = useState<number | undefined>(undefined)
 
   useEffect(() => {
     if (window) {
-      const raw = Telegram.WebApp.initData;
-      const split = raw.split('&')
-      const data = split.reduce((acc: Record<string, string>, item: string) => {
-        const [key, value] = item.split('=')
-        acc[key] = value
-        return acc
-      }, {})
-
-      data.user = JSON.parse(data.user ? decodeURIComponent(data.user) : '{}')
-
-      setSomeshit(data)
+      setUserId(Telegram.WebApp.initDataUnsafe.user?.id)
+      setGroupChatId(
+        Telegram.WebApp.initDataUnsafe.start_param
+          ? Number(Telegram.WebApp.initDataUnsafe.start_param)
+          : undefined
+      )
     }
   })
 
   return (
     <div>
-      <pre>
-        {JSON.stringify(someshit, null, 2)}
-      </pre>
-
       Супер Игра
+
+      <br />
+
+      {!userId || !groupChatId ? (
+        <div>Для начала игры перейдите в чат с ботом</div>
+      ) : (
+        <div>
+          <div>Ваш ID: {userId}</div>
+          <div>Группа: {groupChatId}</div>
+        </div>
+      )}
     </div>
   );
 }
