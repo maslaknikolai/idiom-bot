@@ -5,8 +5,7 @@ import { Form } from "@remix-run/react";
 import { createEmptyContact, updateContact } from "../data";
 import { requireAuthentication } from "../utils/auth";
 import ContactForm from "~/components/ContactForm";
-import { connectToDatabase } from "mongooseDB";
-import { ChatModel } from "models/chat";
+import { connectToDatabase, ChatModel } from "shared";
 import mongoose from "mongoose";
 
 

@@ -3,7 +3,7 @@ import { Form, json, useLoaderData } from "@remix-run/react";
 import { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import invariant from "tiny-invariant";
 import { requireAuthentication } from "../utils/auth";
-import { ChatModel } from "models/chat";
+import { ChatModel } from "shared";
 
 
 export const loader = async ({

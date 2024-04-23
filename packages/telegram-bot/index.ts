@@ -1,11 +1,12 @@
 import TelegramBot from 'node-telegram-bot-api';
 import dotenv from 'dotenv';
 import fs from 'fs';
-import { connectToDatabase } from '../mongooseDB';
-dotenv.config();
+import { connectToDatabase } from 'shared';
+dotenv.config({ path: '../../.env' });
 
+main();
 
-(async () => {
+async function main() {
   connectToDatabase();
   const token = process.env.TELEGRAM_BOT_TOKEN || '';
 
@@ -42,4 +43,4 @@ dotenv.config();
   });
 
   console.log('Bot has been started...');
-})()
+}

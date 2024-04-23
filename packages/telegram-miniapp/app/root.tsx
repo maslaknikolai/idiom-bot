@@ -16,11 +16,10 @@ import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import appStylesHref from "./app.css?url";
 import { useEffect, useState } from "react";
 import { getSession } from "./sessions";
+import { connectToDatabase, ChatModel } from "shared";
 
 import dotenv from 'dotenv';
-import { connectToDatabase } from "mongooseDB";
-import { ChatModel } from "models/chat";
-dotenv.config();
+dotenv.config({ path: '../../.env' });
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: appStylesHref },
