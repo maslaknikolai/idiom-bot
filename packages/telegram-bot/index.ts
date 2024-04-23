@@ -26,6 +26,11 @@ async function main() {
   bot.start((ctx) => {
     console.log('On start', ctx.update);
 
+    if (ctx.update.message.chat.type !== 'group') {
+      ctx.reply('Этот бот работает только в группах');
+      return
+    }
+
     const startUrl = `${miniAppUrl}?startapp=${ctx.update.message.chat.id}`;
 
     ctx.replyWithHTML(
