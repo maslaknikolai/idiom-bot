@@ -16,7 +16,7 @@ export default function Index() {
         return acc
       }, {})
 
-      data.user = JSON.parse(data.user || '{}')
+      data.user = JSON.parse(data.user ? decodeURIComponent(data.user) : '{}')
 
       setSomeshit(data)
     }
