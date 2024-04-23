@@ -1,9 +1,9 @@
-import { Context, Markup, NarrowedContext, Telegraf } from 'telegraf';
+import { Context, NarrowedContext, Telegraf } from 'telegraf';
 import dotenv from 'dotenv';
 import { Chat, ChatModel, connectToDatabase } from 'shared';
-import mongoose from 'shared/mongooseDB';
-import { ChatMemberUpdated, Update } from 'telegraf/types';
+import { Update } from 'telegraf/types';
 import invariant from "tiny-invariant";
+import express from 'express';
 
 dotenv.config({ path: '../../.env' });
 
@@ -15,7 +15,7 @@ const addedToGroupText = `🎉 Привет, всем! Это игра для и
 Каждый день мы угадываем новую идиому и получаем за это очки. В конце недели объявляется победитель.
 Чтобы участвовать, напишите /start прямо в этом чате!`
 
-const playerAddedText = `Отлично! Теперь вы в игре. Чтобы играть нажмите на кнопку`
+const playerAddedText = `Отлично! Теперь вы в игре. Чтобы играть нажмите на ${miniAppUrl}`
 
 const bot = new Telegraf(token);
 
@@ -29,9 +29,6 @@ async function main() {
 
     ctx.replyWithHTML(
       playerAddedText,
-      Markup.inlineKeyboard([
-        Markup.button.url('Перейти в Mini App', miniAppUrl)
-      ])
     )
   });
 
@@ -55,6 +52,19 @@ async function main() {
 
   console.log('Bot has been started...');
   bot.launch();
+
+  const app = express();
+  app.use(express.json());
+
+  app.get('/webhook/message', async (req, res) => {
+    console.log('GET /webhook/message');
+    logToAdmin(`Received webhook message: ${JSON.stringify(req.body)}`);
+  });
+
+  app.listen(5045, () => {
+    console.log(`Server running on http://localhost:${5045}`);
+  });
+
 }
 
 async function onRemoveFromGroup(ctx: NarrowedContext<Context<Update>, Update.MyChatMemberUpdate>) {
@@ -86,10 +96,7 @@ async function onAddToGroup(ctx: NarrowedContext<Context<Update>, Update.MyChatM
   await chat.save();
 
   ctx.replyWithHTML(
-    addedToGroupText,
-    Markup.inlineKeyboard([
-      Markup.button.url('Перейти в Mini App', miniAppUrl)
-    ])
+    addedToGroupText
   );
 
   logToAdmin(`Добавлен в новую группу: ${chat.tg_id} - ${chat.name}`)
