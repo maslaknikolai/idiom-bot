@@ -26,8 +26,10 @@ async function main() {
   bot.start((ctx) => {
     console.log('On start', ctx.update);
 
+    const startUrl = `${miniAppUrl}?startapp=${ctx.update.message.chat.id}`;
+
     ctx.replyWithHTML(
-      `Отлично! Теперь вы в игре. Чтобы играть нажмите на ${miniAppUrl}?startapp=${ctx.update.message.chat.id}`,
+      `Отлично! Теперь вы в игре. Чтобы играть нажмите на <a href="${startUrl}">Играть</a>`,
     )
   });
 
