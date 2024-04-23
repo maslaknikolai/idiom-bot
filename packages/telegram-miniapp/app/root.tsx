@@ -15,7 +15,7 @@ export default function App() {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-``      <script src="https://telegram.org/js/telegram-web-app.js"></script>
+        <script src="https://telegram.org/js/telegram-web-app.js"></script>
         <Meta />
         <Links />
         <Scripts />
