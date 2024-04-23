@@ -9,7 +9,8 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "yarn workspaces foreach --all run build"
+    "build": "yarn workspaces foreach --all run build",
+    "start": "yarn workspaces foreach --all --parallel run start"
   },
   "packageManager": "yarn@4.1.1"
 }

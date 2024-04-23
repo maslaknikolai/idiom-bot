@@ -9,12 +9,14 @@
     "outDir": "./dist/bot",
     "removeComments": true,
     "noEmitOnError": true,
-    "moduleResolution": "NodeNext"
+    "moduleResolution": "NodeNext",
+    "paths": {
+      "~/*": ["./*"],
+      "shared": ["./packages/shared"],
+    },
   },
-  "include": [
-    "bot/**/*.ts",
-    "models/**/*.ts",
-    "mongooseDB.ts"
+"include": [
+    "**/*.ts"
   ],
   "exclude": [
     "node_modules"

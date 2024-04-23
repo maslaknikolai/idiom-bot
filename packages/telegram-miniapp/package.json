@@ -8,7 +8,6 @@
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",
-    "dev:bot": "npx nodemon --watch bot/index.ts --ext ts --exec \"tsc -p tsconfig.bot.json && node dist/bot/index.js\"",
     "build:bot": "tsc -p tsconfig.bot.json",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve build/server/index.js",
@@ -22,7 +21,6 @@
     "isbot": "^4.1.0",
     "match-sorter": "^6.3.1",
     "mongoose": "^8.3.2",
-    "node-telegram-bot-api": "^0.65.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sort-by": "^1.2.0",
@@ -31,7 +29,6 @@
   "devDependencies": {
     "@remix-run/dev": "^2.8.1",
     "@types/node": "^20.12.7",
-    "@types/node-telegram-bot-api": "^0.64.6",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.13.0",
@@ -42,7 +39,6 @@
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
     "tsc-watch": "^6.2.0",
     "typescript": "^5.4.5",
