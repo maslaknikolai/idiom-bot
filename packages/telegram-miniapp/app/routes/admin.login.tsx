@@ -9,7 +9,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   if (session.has("userId")) {
     // Redirect to the home page if they are already signed in.
-    return redirect("/");
+    return redirect("/admin");
   }
 
   const data = { error: session.get("error") };
@@ -33,7 +33,7 @@ export async function action({ request }: ActionFunctionArgs) {
   ) {
     session.flash("error", "Invalid username/password")
 
-    return redirect("/login", {
+    return redirect("/admin/login", {
       headers: {
         "Set-Cookie": await commitSession(session),
       },
@@ -42,7 +42,7 @@ export async function action({ request }: ActionFunctionArgs) {
 
   session.set("userId", 'my_id');
 
-  return redirect("/", {
+  return redirect("/admin", {
     headers: {
       "Set-Cookie": await commitSession(session),
     },
