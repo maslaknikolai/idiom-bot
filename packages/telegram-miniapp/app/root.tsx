@@ -26,7 +26,7 @@ export default function App() {
         <Scripts />
       </head>
 
-      <body>
+      <body className="bg-[#f7e2d8]">
         <Outlet />
         <ScrollRestoration />
         <Scripts />

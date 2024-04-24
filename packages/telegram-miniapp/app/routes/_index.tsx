@@ -2,12 +2,16 @@ import { useEffect } from 'react';
 import { LoaderFunctionArgs, json } from '@remix-run/node';
 import { useLoaderData, useNavigate } from '@remix-run/react';
 
-
 // hack to make it work
 // eslint-disable-next-line
 import * as no from 'telegram-webapps'
+import invariant from 'tiny-invariant';
+import { verifyTelegramWebAppData } from '~/utils/verifyTelegramWebAppData';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  invariant(botToken, 'TELEGRAM_BOT_TOKEN is required');
+
   const urlParams = new URL(request.url).searchParams;
   const initDataEncoded = urlParams.get('initData');
   const groupChatId = urlParams.get('groupChatId');
@@ -20,43 +24,51 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     }, { status: 400 });
   }
 
-  // const initData = decodeURIComponent(initDataEncoded);
+  if (!verifyTelegramWebAppData(initDataEncoded)) {
+    return json({
+      error: 'Invalid Telegram WebApp Data',
+      username: null,
+      groupChatId: null
+    }, { status: 400 });
+  }
 
-  return json({
-    error: null,
-    username: initDataEncoded,
-    groupChatId
-  })
+  try {
+    const initData = new URLSearchParams(initDataEncoded);
 
-  // // Parse and validate the initData if necessary
-  // try {
-  //   const initDataObj = JSON.parse(initData);
-  //   const userId = initDataObj.user?.id;
-  //   const groupChatId = initDataObj.chat?.id;
-  //   const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const user = JSON.parse(decodeURIComponent(initData.get('user') || 'null'));
+    const userId = user?.id;
 
-  //   if (!userId || !groupChatId) {
-  //     return json({ error: 'User ID and Chat ID are required from initData', username: null }, { status: 400 });
-  //   }
+    const apiUrl = `https://api.telegram.org/bot${botToken}/getChatMember?chat_id=${groupChatId}&user_id=${userId}`;
+    const response = await fetch(apiUrl);
+    const data = await response.json();
 
-  //   const apiUrl = `https://api.telegram.org/bot${botToken}/getChatMember?chat_id=${groupChatId}&user_id=${userId}`;
-  //   const response = await fetch(apiUrl);
-  //   const data = await response.json();
-  //   if (data.ok && data.result) {
-  //     return json({ username: data.result.user.username, error: null });
-  //   }
-  //   return json({ error: 'No username found', username: null });
+    return json({
+      error: null,
+      username: data?.result?.user?.first_name || 'Name not found',
+      groupChatId
+    })
+  } catch (error) {
+    const message = (
+      error &&
+      typeof error === 'object' &&
+      'message' in error &&
+      typeof error.message === 'string'
+    )
+      ? error.message
+      : 'Unknown error';
 
-  // } catch (error) {
-  //   return json({ error: 'Failed to parse or fetch data from Telegram API', username: null}, { status: 500 });
-  // }
+    return json({
+      error: message,
+      username: null,
+      groupChatId: null
+    }, { status: 500 });
+  }
 };
 
 export default function Index() {
-  const { username, error } = useLoaderData<typeof loader>();
+  const { username, error, groupChatId } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
 
-  // 
   useEffect(() => {
     if (Telegram?.WebApp?.initData && Telegram.WebApp.initDataUnsafe.start_param) {
       navigate(`/?initData=${encodeURIComponent(Telegram?.WebApp?.initData)}&groupChatId=${Telegram.WebApp.initDataUnsafe.start_param}`);
@@ -66,19 +78,18 @@ export default function Index() {
     if (window) {
       // eslint-disable-next-line
       // @ts-ignore
-      window.devInit = (initData: string, groupChatId:  string) => {
-        navigate(`/?initData=${initData}&groupChatId=${groupChatId}`);
+      window.devInit = (initData: string, newGroupChatId:  string) => {
+        navigate(`/?initData=${initData}&groupChatId=${newGroupChatId}`);
       }
     }
   }, [navigate]);
-
 
   return (
     <div>
       <h1 className="text-3xl font-bold">Супер Игра</h1>
       <br />
 
-      {!username && !error && (
+      {!username && !error && !groupChatId && (
         <div>Loading...</div>
       )}
 
@@ -86,7 +97,7 @@ export default function Index() {
         <div>Error: {error}</div>
       )}
 
-      {username && (
+      {username && groupChatId && (
         <div>
           <div>Username: {username}</div>
         </div>
