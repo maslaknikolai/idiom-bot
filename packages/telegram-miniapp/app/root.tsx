@@ -6,8 +6,15 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
+import stylesheet from "./tailwind.css?url";
+
 import dotenv from 'dotenv';
+import { LinksFunction } from "@remix-run/node";
 dotenv.config({ path: '../../.env' });
+
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: stylesheet },
+];
 
 export default function App() {
   return (

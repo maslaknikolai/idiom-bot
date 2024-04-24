@@ -21,7 +21,9 @@ export default function Index() {
 
   return (
     <div>
-      Супер Игра
+      <h1 className="text-3xl font-bold">
+        Супер Игра
+      </h1>
 
       <br />
 
