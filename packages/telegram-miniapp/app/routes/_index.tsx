@@ -26,7 +26,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   if (!verifyTelegramWebAppData(initDataEncoded)) {
-    console.log('Invalid Telegram WebApp Data', initDataEncoded);
+    console.log('Invalid Telegram WebApp Data', initDataEncoded, 'botToken', botToken, 'groupChatId', groupChatId);
 
     return json({
       error: 'Invalid Telegram WebApp Data',
