@@ -56,10 +56,10 @@ export default function Index() {
   const { username, error } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
 
-  // First time user
+  // 
   useEffect(() => {
     if (Telegram?.WebApp?.initData && Telegram.WebApp.initDataUnsafe.start_param) {
-      navigate(`/?initData=${Telegram?.WebApp?.initData}&groupChatId=${Telegram.WebApp.initDataUnsafe.start_param}`);
+      navigate(`/?initData=${encodeURIComponent(Telegram?.WebApp?.initData)}&groupChatId=${Telegram.WebApp.initDataUnsafe.start_param}`);
     }
 
     // For development purposes
