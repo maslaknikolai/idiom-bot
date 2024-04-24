@@ -16,6 +16,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   const initDataEncoded = urlParams.get('initData');
   const groupChatId = urlParams.get('groupChatId');
 
+  // First time page loads by Telegram without any params
   if (!initDataEncoded || !groupChatId) {
     return json({
       error: null,
@@ -25,6 +26,8 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   if (!verifyTelegramWebAppData(initDataEncoded)) {
+    console.log('Invalid Telegram WebApp Data', initDataEncoded);
+
     return json({
       error: 'Invalid Telegram WebApp Data',
       username: null,
@@ -47,6 +50,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
       username: data?.result?.user?.first_name || 'Name not found',
       groupChatId
     })
+
   } catch (error) {
     const message = (
       error &&
@@ -79,7 +83,7 @@ export default function Index() {
       // eslint-disable-next-line
       // @ts-ignore
       window.devInit = (initData: string, newGroupChatId:  string) => {
-        navigate(`/?initData=${initData}&groupChatId=${newGroupChatId}`);
+        navigate(`/?initData=${encodeURIComponent(initData)}&groupChatId=${newGroupChatId}`);
       }
     }
   }, [navigate]);
