@@ -1,6 +1,6 @@
 import { Context, NarrowedContext, Telegraf } from 'telegraf';
 import dotenv from 'dotenv';
-import { Chat, ChatModel, connectToDatabase } from 'shared';
+import { Chat, ChatModel, Player, connectToDatabase } from 'shared';
 import { Update } from 'telegraf/types';
 import invariant from "tiny-invariant";
 import express from 'express';
@@ -19,7 +19,7 @@ main();
 async function main() {
   await connectToDatabase();
 
-  bot.start((ctx) => {
+  bot.start(async (ctx) => {
     console.log('On start', ctx.update);
 
     if (ctx.update.message.chat.type !== 'group') {
@@ -28,6 +28,20 @@ async function main() {
     }
 
     const startUrl = `${miniAppUrl}?startapp=${ctx.update.message.chat.id}`;
+
+    const chat = await ChatModel.findOne({ tg_id: ctx.update.message.chat.id });
+
+    if (!chat) {
+      ctx.reply('Ошибка: группа не найдена');
+      return;
+    }
+
+    chat?.players.push({
+      tg_id: ctx.update.message.from.id,
+      name: ctx.update.message.from.first_name
+    } satisfies Player);
+
+    await chat.save();
 
     ctx.replyWithHTML(
       `Отлично! Теперь вы в игре. <a href="${startUrl}">Играть</a>`,
