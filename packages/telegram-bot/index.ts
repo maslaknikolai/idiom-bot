@@ -12,10 +12,6 @@ const adminChatId = process.env.ADMIN_TELEGRAM_ID;
 const miniAppUrl = process.env.MINI_APP_URL || '';
 const botWebhookPort = process.env.BOT_WEBHOOK_PORT || 5045;
 
-const addedToGroupText = `🎉 Привет, всем! Это игра для изучения английских идиом.
-Каждый день мы угадываем новую идиому и получаем за это очки. В конце недели объявляется победитель.
-Чтобы участвовать, напишите /start прямо в этом чате!`
-
 const bot = new Telegraf(token);
 
 main();
@@ -89,6 +85,9 @@ async function onAddToGroup(ctx: NarrowedContext<Context<Update>, Update.MyChatM
   console.log(`Added to group`, ctx.update);
   invariant(ctx.update.my_chat_member.chat.id, 'Chat ID is required')
 
+  // remove chat if chat already exists
+  await ChatModel.deleteOne({ tg_id: ctx.update.my_chat_member.chat.id });
+
   const chat = new ChatModel({
     tg_id: ctx.update.my_chat_member.chat.id,
     name: 'title' in ctx.update.my_chat_member.chat
@@ -100,9 +99,11 @@ async function onAddToGroup(ctx: NarrowedContext<Context<Update>, Update.MyChatM
 
   await chat.save();
 
-  ctx.replyWithHTML(
-    addedToGroupText
-  );
+  const addedToGroupText = `🎉 Привет, всем! Это игра для изучения английских идиом.
+Каждый день мы угадываем новую идиому и получаем за это очки. В конце недели объявляется победитель.
+Чтобы участвовать, напишите /start прямо в этом чате!`
+
+  ctx.replyWithHTML(addedToGroupText);
 
   logToAdmin(`Добавлен в новую группу: ${chat.tg_id} - ${chat.name}`)
 }
