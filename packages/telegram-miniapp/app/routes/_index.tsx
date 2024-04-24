@@ -20,11 +20,11 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     }, { status: 400 });
   }
 
-  const initData = decodeURIComponent(initDataEncoded);
+  // const initData = decodeURIComponent(initDataEncoded);
 
   return json({
     error: null,
-    username: initData,
+    username: initDataEncoded,
     groupChatId
   })
 
