@@ -6,6 +6,6 @@ export async function requireAuthentication(request: Request) {
   const userId = session.get("userId");
 
   if (!userId) {
-    return redirect("/login");
+    return redirect("/admin/login");
   }
 }

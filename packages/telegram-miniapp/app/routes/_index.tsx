@@ -28,7 +28,10 @@ export default function Index() {
         if ('b' in v) setGroupChatId(v.b)
       }
     }
-  })
+  }, [
+    setUserId,
+    setGroupChatId
+  ])
 
   return (
     <div>

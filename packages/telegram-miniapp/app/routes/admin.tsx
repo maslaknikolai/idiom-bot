@@ -77,7 +77,7 @@ export default function App() {
           <div>
             {userName}
             {userName === "Guest" ? (
-              <Link to="/login">Login</Link>
+              <Link to="/admin/login">Login</Link>
             ) : (
               <Form method="post" action="/logout">
                 <button type="submit">Logout</button>
