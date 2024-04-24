@@ -17,6 +17,16 @@ export default function Index() {
           : undefined
       )
     }
+
+    // eslint-disable-next-line
+    // @ts-ignore
+    window.huj = (
+      // eslint-disable-next-line
+      v: {a?: any, b?: any}
+    ) => {
+      if ('a' in v) setUserId(v.a)
+      if ('b' in v) setGroupChatId(v.b)
+    }
   })
 
   return (
