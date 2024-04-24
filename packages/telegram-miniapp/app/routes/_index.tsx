@@ -16,16 +16,17 @@ export default function Index() {
           ? Number(Telegram.WebApp.initDataUnsafe.start_param)
           : undefined
       )
-    }
 
-    // eslint-disable-next-line
-    // @ts-ignore
-    window.huj = (
+
       // eslint-disable-next-line
-      v: {a?: any, b?: any}
-    ) => {
-      if ('a' in v) setUserId(v.a)
-      if ('b' in v) setGroupChatId(v.b)
+      // @ts-ignore
+      window.huj = (
+        // eslint-disable-next-line
+        v: {a?: any, b?: any}
+      ) => {
+        if ('a' in v) setUserId(v.a)
+        if ('b' in v) setGroupChatId(v.b)
+      }
     }
   })
 
