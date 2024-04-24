@@ -10,7 +10,7 @@ dotenv.config({ path: '../../.env' });
 const token = process.env.TELEGRAM_BOT_TOKEN || '';
 const adminChatId = process.env.ADMIN_TELEGRAM_ID;
 const miniAppUrl = process.env.MINI_APP_URL || '';
-const botWebhookPort = process.env.BOT_WEBHOOK_PORT || 5045;
+const webhookPort = process.env.BOT_WEBHOOK_PORT || 5045;
 
 const bot = new Telegraf(token);
 
@@ -55,16 +55,16 @@ async function main() {
   console.log('Bot has been started...');
   bot.launch();
 
-  const app = express();
-  app.use(express.json());
+  const webhookServer = express();
+  webhookServer.use(express.json());
 
-  app.get('/webhook/message', async (req, res) => {
+  webhookServer.get('/webhook/message', async (req, res) => {
     console.log('GET /webhook/message');
     logToAdmin(`Received webhook message: ${JSON.stringify(req.body)}`);
   });
 
-  app.listen(botWebhookPort, () => {
-    console.log(`Server running on http://localhost:${botWebhookPort}`);
+  webhookServer.listen(webhookPort, () => {
+    console.log(`Server running on http://localhost:${webhookPort}`);
   });
 }
 
