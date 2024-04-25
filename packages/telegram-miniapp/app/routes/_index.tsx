@@ -7,6 +7,7 @@ import { Form, useLoaderData, useNavigate } from '@remix-run/react';
 import * as no from 'telegram-webapps'
 import invariant from 'tiny-invariant';
 import { verifyTelegramWebAppData } from '~/utils/verifyTelegramWebAppData';
+import classNames from 'classnames';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const botToken = process.env.TELEGRAM_BOT_TOKEN;
@@ -94,60 +95,75 @@ export default function Index() {
 
   return (
     <div className="px-2 py-4">
-      {!username && !error && !groupChatId && (
-        <div>Loading...</div>
-      )}
-
-      {error && (
-        <div>Error: {error}</div>
-      )}
-
-      {isClient && !error && username && groupChatId && (
         <Form>
           <input type="hidden" name="username" value={username} />
-          <input type="hidden" name="groupChatId" value={groupChatId} />
-          <input type="hidden" name="groupChatId" value={encodeURIComponent(Telegram?.WebApp?.initData)} />
-          <Game username={username} />
+          <input type="hidden" name="groupChatId" value={groupChatId || ''} />
+          {isClient && (<input type="hidden" name="initData" value={encodeURIComponent(Telegram?.WebApp?.initData)} />)}
+
+          <Game
+            isLoading={!username && !error && !groupChatId}
+            error={error}
+            username={username}
+          />
         </Form>
-      )}
     </div>
   );
 }
 
 function Game({
-  username
+  username,
+  error,
+  isLoading,
 }: {
   username: string
+  error: string | null
+  isLoading: boolean
 }) {
   const [step, setStep] = useState(0);
 
   return (
     <div>
-      <h1 className='flex'>
-        <span className="text-sm font-bold bg-black text-[#f17a2d] inline-block px-4 py-1 rotate-[-5deg]">
-          ИДИОМЫ
-        </span>
+      {error ? (
+        <div>Error: {error}</div>
+      ): (
+        <>
+          <h1 className={classNames(
+            'text-2xl font-bold fixed top-0',
+            { 'logo': isLoading },
+            { 'logo-appear': !isLoading }
+          )}>
+            <span className="text-sm font-bold bg-black text-[#f17a2d] inline-block px-4 py-1">
+              ИДИОМЫ
+            </span>
+          </h1>
 
-        <p className='pl-1'>Привет, {username}!</p>
-      </h1>
-
-      <div className="mt-4">
-        <button
-          className="
-            bg-[#f17a2d] text-white px-4 py-2 mt-2 transition-shadow duration-300
-            ease-in-out
-            shadow-[1px_1px_0_0_black,2px_2px_0_0_black,3px_3px_0_0_black,4px_4px_0_0_black]
-            border-2
-            border-black
-            active:shadow-[1px_1px_0_0_black,2px_2px_0_0_black]
-            active:bg-[#ff7b23]
-          "
-          onClick={() => setStep(step + 1)}
-          type='button'
-        >
-          Начать
-        </button>
-      </div>
+          <div
+            className="
+              mt-4
+            "
+          >
+            <button
+              className={classNames(`
+                bg-[#f17a2d] text-white px-4 py-2 mt-2 transition-shadow duration-300
+                ease-in-out
+                shadow-[1px_1px_0_0_black,2px_2px_0_0_black,3px_3px_0_0_black,4px_4px_0_0_black]
+                border-2
+                border-black
+                active:shadow-[1px_1px_0_0_black,2px_2px_0_0_black]
+                active:bg-[#ff7b23]
+                transition-opacity
+              `, {
+                'opacity-0': isLoading,
+                'opacity-100': !isLoading,
+              })}
+              onClick={() => setStep(step + 1)}
+              type="button"
+            >
+              Начать
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }

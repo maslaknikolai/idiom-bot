@@ -1,3 +1,27 @@
+/* Tailwind imports */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Keyframes for logo appearance */
+@keyframes logoAppear {
+  0%   {
+    transform: scale(2) rotate(-5deg) translateX(-50%) translateY(50px);
+    left: 50%;
+  }
+  100% {
+    transform: scale(1) rotate(0deg) translateX(0) translateY(0);
+    left: .5rem;
+  }
+}
+
+/* Initial logo style (can be omitted if not needed initially) */
+.logo {
+  transform: scale(2) rotate(-5deg) translateX(-50%) translateY(50px);
+  left: 50%;
+}
+
+/* Animation trigger class */
+.logo-appear {
+    animation: logoAppear 500ms ease-out 1 forwards;
+}
