@@ -128,7 +128,7 @@ function Game({
       ): (
         <>
           <h1 className={classNames(
-            'text-2xl font-bold fixed top-0',
+            'text-2xl font-bold absolute top-0',
             { 'logo': isLoading },
             { 'logo-appear': !isLoading }
           )}>
