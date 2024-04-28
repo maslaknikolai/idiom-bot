@@ -1,8 +1,11 @@
 import { LoaderFunctionArgs, json } from '@remix-run/node';
+import { IdiomModel, connectToDatabase } from 'shared';
 import invariant from 'tiny-invariant';
 import { verifyTelegramWebAppData } from '~/utils/verifyTelegramWebAppData';
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
+  await connectToDatabase();
+
   const botToken = process.env.TELEGRAM_BOT_TOKEN;
   invariant(botToken, 'TELEGRAM_BOT_TOKEN is required');
 
@@ -18,19 +21,21 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   if (!verifyTelegramWebAppData(initDataEncoded)) {
-    console.log('Invalid Telegram WebApp Data', initDataEncoded, 'botToken', botToken, 'groupChatId', groupChatId);
+    console.log('Invalid Telegram WebApp Data', encodeURIComponent(initDataEncoded), 'botToken', botToken, 'groupChatId', groupChatId);
 
     return json({
       error: 'Invalid Telegram WebApp Data',
     }, { status: 400 });
   }
 
+  const rawChat = await IdiomModel.findOne()
+
   return json({
-    idiom: {
-      id: 1,
-      title: 'A penny for your thoughts',
-      imageUrl: 'https://maslaknikolai.github.io/idiom-bot/crying_over_spilled_milk.jpg',
-    },
+    idiom: rawChat ? {
+      ...rawChat.toJSON(),
+      meaning_options: rawChat.meaning_options.map((option) => option.text),
+      usage_options: rawChat.usage_options.map((option) => option.text),
+    } : null,
     error: null,
   });
 };

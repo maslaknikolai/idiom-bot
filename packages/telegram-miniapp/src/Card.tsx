@@ -11,7 +11,7 @@ export const Slide = ({
   shownIndex: number,
 }) => {
   const isShown = index === shownIndex;
-  const x = `${shownIndex * -100}vw`;
+  const x = `${shownIndex * -100}%`;
 
   return (
       <motion.div

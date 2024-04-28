@@ -24,5 +24,5 @@ const idiomSchema = new mongoose.Schema<Idiom>({
   usage_options: [optionSchema]
 });
 
-export const Idiom = mongoose.model<Idiom>('Idiom', idiomSchema);
+export const IdiomModel = mongoose.model<Idiom>('Idiom', idiomSchema);
 

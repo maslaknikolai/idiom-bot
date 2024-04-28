@@ -2,17 +2,20 @@ import { atom, useAtom } from "jotai";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Slide } from "./Card";
-import { Username } from "./Username";
 
 type Idiom = {
     id: number,
-    title: string,
-    imageUrl: string,
+    text: string,
+    image_url: string,
+    meaning_options: string[],
+    usage_options: string[],
 }
 
 const idiomAtom = atom<Idiom | null>(null);
 
-const stepAtom = atom(1);
+const stepIndexAtom = atom(0);
+const selectedMeaningIndexAtom = atom<number | null>(null);
+const selectedUsageIndexAtom = atom<number | null>(null);
 
 const useImageLoader = (src: string | undefined) => {
   const [image, setImage] = useState<string | undefined>(undefined);
@@ -36,7 +39,7 @@ const useImageLoader = (src: string | undefined) => {
 export default function App() {
   const [idiom, setIdiom] = useAtom(idiomAtom);
   const [error, setError] = useState<string | null>(null);
-  const idiomLoadedImage = useImageLoader(idiom?.imageUrl);
+  const idiomLoadedImage = useImageLoader(idiom?.image_url);
 
   useEffect(() => {
     fetchIdiom()
@@ -58,7 +61,7 @@ export default function App() {
 
   return (
     <div className="p-2">
-      <Username />
+      {/* <Username /> */}
 
       {idiom && idiomLoadedImage && (
         <Content />
@@ -69,7 +72,11 @@ export default function App() {
 
 function Content() {
   const [idiom] = useAtom(idiomAtom);
-  const [currentStep, setCurrentStep] = useAtom(stepAtom);
+  const [currentStepIndex, setCurrentStepIndex] = useAtom(stepIndexAtom);
+  const [selectedMeaningIndex, setSelectedMeaningIndex] = useAtom(selectedMeaningIndexAtom);
+  const [selectedUsageIndex, setSelectedUsageIndex] = useAtom(selectedUsageIndexAtom);
+
+  console.log(selectedMeaningIndex, selectedUsageIndex);
 
   if (!idiom) {
     return null;
@@ -77,21 +84,19 @@ function Content() {
 
   return (
     <div className="overflow-hidden relative flex">
-      <Slide index={0} shownIndex={currentStep - 1}>
+      <Slide index={0} shownIndex={currentStepIndex}>
         {idiom && (
           <div className="flex flex-col justify-center items-center relative h-80">
-            {idiom.imageUrl && (
-              <div className="Background absolute w-full h-full rounded-xl overflow-hidden -z-10 bg-black">
-                <img src={idiom.imageUrl} alt={idiom?.title} className="w-full h-full object-cover opacity-50" />
-              </div>
-            )}
+            <div className="Background absolute w-full h-full rounded-xl overflow-hidden -z-10 bg-black">
+              <img src={idiom.image_url} alt={idiom.text} className="w-full h-full object-cover opacity-50" />
+            </div>
             <p className="z-10 text-white text-lg pt-10">Idiom of the day</p>
             <h1 className="z-10 text-white text-5xl font-bold text-center drop-shadow-lg my-2">
-              {idiom?.title}
+              {idiom.text}
             </h1>
             <motion.button
               className="z-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-              onClick={() => setCurrentStep(currentStep + 1)}
+              onClick={() => setCurrentStepIndex(currentStepIndex + 1)}
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -101,16 +106,70 @@ function Content() {
         )}
       </Slide>
 
-      <Slide index={1} shownIndex={currentStep - 1}>
+      <Slide index={1} shownIndex={currentStepIndex}>
         <div className="flex flex-col items-center p-4">
-          <h1 className="text-2xl font-bold">Did you know?</h1>
-          <p>This idiom is used to ask someone what they are thinking about.</p>
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
-            onClick={() => setCurrentStep(currentStep + 1)}
-          >
-            Next
-          </button>
+          <h1 className="text-2xl font-bold mb-4">
+            Guess the meaning of the idiom
+          </h1>
+
+          {idiom.meaning_options.map((option, i) => (
+            <motion.button
+              className="block mb-2 z-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                setSelectedMeaningIndex(i);
+                setCurrentStepIndex(currentStepIndex + 1);
+              }}
+            >
+              {option}
+            </motion.button>
+          ))}
         </div>
+      </Slide>
+
+      <Slide index={2} shownIndex={currentStepIndex}>
+        <div className="flex flex-col items-center p-4">
+          <h1 className="text-2xl font-bold mb-4">
+            Guess the correct usage of the idiom
+          </h1>
+
+          {idiom.usage_options.map((option, i) => (
+            <motion.button
+              className="block mb-2 z-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                setSelectedUsageIndex(i);
+                setCurrentStepIndex(currentStepIndex + 1);
+              }}
+            >
+              {option}
+            </motion.button>
+          ))}
+        </div>
+      </Slide>
+
+      <Slide index={3} shownIndex={currentStepIndex}>
+        {currentStepIndex === 3 && (
+          <div className="h-full flex items-center justify-center">
+            <motion.div
+              className="w-[50px] h-[50px] bg-[#9900ff]"
+              animate={{
+                scale: [1, 2, 2, 1, 1],
+                rotate: [0, 0, 180, 180, 0],
+                borderRadius: ["0%", "0%", "50%", "50%", "0%"]
+              }}
+              transition={{
+                duration: 2,
+                ease: "easeInOut",
+                times: [0, 0.2, 0.5, 0.8, 1],
+                repeat: Infinity,
+                repeatDelay: 1
+              }}
+            />
+          </div>
+        )}
       </Slide>
     </div>
   );
