@@ -1,7 +1,7 @@
 import { atom, useAtom } from "jotai";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Card } from "./Card";
+import { Slide } from "./Card";
 import { Username } from "./Username";
 
 type Idiom = {
@@ -33,7 +33,7 @@ const useImageLoader = (src: string | undefined) => {
   return image;
 }
 
-function App() {
+export default function App() {
   const [idiom, setIdiom] = useAtom(idiomAtom);
   const [error, setError] = useState<string | null>(null);
   const idiomLoadedImage = useImageLoader(idiom?.imageUrl);
@@ -77,7 +77,7 @@ function Content() {
 
   return (
     <div className="overflow-hidden relative flex">
-      <Card isShown={currentStep === 1}>
+      <Slide index={0} shownIndex={currentStep - 1}>
         {idiom && (
           <div className="flex flex-col justify-center items-center relative h-80">
             {idiom.imageUrl && (
@@ -99,9 +99,9 @@ function Content() {
             </motion.button>
           </div>
         )}
-      </Card>
+      </Slide>
 
-      <Card isShown={currentStep === 2}>
+      <Slide index={1} shownIndex={currentStep - 1}>
         <div className="flex flex-col items-center p-4">
           <h1 className="text-2xl font-bold">Did you know?</h1>
           <p>This idiom is used to ask someone what they are thinking about.</p>
@@ -111,10 +111,8 @@ function Content() {
             Next
           </button>
         </div>
-      </Card>
+      </Slide>
     </div>
   );
 }
 
-
-export default App;

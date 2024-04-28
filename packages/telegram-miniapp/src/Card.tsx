@@ -1,31 +1,27 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
-const variants = {
-  hidden: { x: '100vw', opacity: 0 },
-  visible: { x: 0, opacity: 1, transition: { type: 'spring', stiffness: 100 }},
-  exit: { x: '-100vw', opacity: 0, transition: { duration: 0.3 } }
-};
 
-export const Card = ({
+export const Slide = ({
   children,
-  isShown,
+  index,
+  shownIndex,
 }: {
   children: React.ReactNode;
-  isShown: boolean;
+  index: number;
+  shownIndex: number,
 }) => {
+  const isShown = index === shownIndex;
+  const x = `${shownIndex * -100}vw`;
+
   return (
-    <AnimatePresence>
-      {isShown && (
-        <motion.div
-          variants={variants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          className="Card w-full"
-        >
-          {children}
-        </motion.div>
-      )}
-    </AnimatePresence>
+      <motion.div
+        animate={{
+          x,
+          opacity: isShown ? 1 : 0
+        }}
+        className="Slide w-full shrink-0"
+      >
+        {children}
+      </motion.div>
   );
 };
