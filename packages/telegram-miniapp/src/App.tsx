@@ -108,7 +108,7 @@ function Content() {
 
       <Slide index={1} shownIndex={currentStepIndex}>
         {currentStepIndex === 1 && (
-          <div className="flex flex-col items-center p-4">
+          <div className="p-4">
             <h1 className="text-2xl font-bold mb-4 text-center">
               Guess the meaning of the idiom
               "{idiom.text}"
@@ -116,7 +116,7 @@ function Content() {
 
             {idiom.meaning_options.map((option, i) => (
               <motion.button
-                className="block mb-2 z-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                className="block w-full mb-2 z-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => {
@@ -132,7 +132,7 @@ function Content() {
       </Slide>
 
       <Slide index={2} shownIndex={currentStepIndex}>
-        <div className="flex flex-col items-center p-4">
+        <div className="p-4">
           <h1 className="text-2xl font-bold mb-4 text-center">
             Guess the correct usage of the idiom
             "{idiom.text}"
@@ -140,7 +140,7 @@ function Content() {
 
           {idiom.usage_options.map((option, i) => (
             <motion.button
-              className="block mb-2 z-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              className="block w-full mb-2 z-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => {
@@ -156,7 +156,7 @@ function Content() {
 
       <Slide index={3} shownIndex={currentStepIndex}>
         {currentStepIndex === 3 && (
-          <div className="h-[100vh] flex items-center justify-center">
+          <div className="flex items-center justify-center min-h-[500px]">
             <motion.div
               className="w-[50px] h-[50px] bg-red-500"
               animate={{
