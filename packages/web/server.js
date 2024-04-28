@@ -3,7 +3,6 @@ import cors from 'cors';
 import { createRequestHandler } from '@remix-run/express';
 import dotenv from 'dotenv';
 dotenv.config({ path: '../../.env' });
-console.log(process.env);
 
 const PORT = process.env.PORT || 5174
 
