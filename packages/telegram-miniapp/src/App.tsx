@@ -109,7 +109,7 @@ function Content() {
       <Slide index={1} shownIndex={currentStepIndex}>
         {currentStepIndex === 1 && (
           <div className="flex flex-col items-center p-4">
-            <h1 className="text-2xl font-bold mb-4">
+            <h1 className="text-2xl font-bold mb-4 text-center">
               Guess the meaning of the idiom
               "{idiom.text}"
             </h1>
@@ -133,7 +133,7 @@ function Content() {
 
       <Slide index={2} shownIndex={currentStepIndex}>
         <div className="flex flex-col items-center p-4">
-          <h1 className="text-2xl font-bold mb-4">
+          <h1 className="text-2xl font-bold mb-4 text-center">
             Guess the correct usage of the idiom
             "{idiom.text}"
           </h1>
