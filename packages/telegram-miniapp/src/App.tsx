@@ -60,9 +60,7 @@ export default function App() {
   }
 
   return (
-    <div className="p-2">
-      {/* <Username /> */}
-
+    <div>
       {idiom && idiomLoadedImage && (
         <Content />
       )}
@@ -85,48 +83,52 @@ function Content() {
   return (
     <div className="overflow-hidden relative flex">
       <Slide index={0} shownIndex={currentStepIndex}>
-        {idiom && (
-          <div className="flex flex-col justify-center items-center relative h-80">
-            <div className="Background absolute w-full h-full rounded-xl overflow-hidden -z-10 bg-black">
-              <img src={idiom.image_url} alt={idiom.text} className="w-full h-full object-cover opacity-50" />
+        {currentStepIndex === 0 && idiom && (
+          <div className="p-4">
+            <div className="flex flex-col justify-center items-center relative h-80">
+              <div className="Background absolute w-full h-full rounded-xl overflow-hidden -z-10 bg-black">
+                <img src={idiom.image_url} alt={idiom.text} className="w-full h-full object-cover opacity-50" />
+              </div>
+              <p className="z-10 text-white text-lg pt-10">Idiom of the day</p>
+              <h1 className="z-10 text-white text-5xl font-bold text-center drop-shadow-lg my-2">
+                {idiom.text}
+              </h1>
+              <motion.button
+                className="z-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                onClick={() => setCurrentStepIndex(currentStepIndex + 1)}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                Okay
+              </motion.button>
             </div>
-            <p className="z-10 text-white text-lg pt-10">Idiom of the day</p>
-            <h1 className="z-10 text-white text-5xl font-bold text-center drop-shadow-lg my-2">
-              {idiom.text}
-            </h1>
-            <motion.button
-              className="z-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-              onClick={() => setCurrentStepIndex(currentStepIndex + 1)}
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Okay
-            </motion.button>
           </div>
         )}
       </Slide>
 
       <Slide index={1} shownIndex={currentStepIndex}>
-        <div className="flex flex-col items-center p-4">
-          <h1 className="text-2xl font-bold mb-4">
-            Guess the meaning of the idiom
-            "{idiom.text}"
-          </h1>
+        {currentStepIndex === 1 && (
+          <div className="flex flex-col items-center p-4">
+            <h1 className="text-2xl font-bold mb-4">
+              Guess the meaning of the idiom
+              "{idiom.text}"
+            </h1>
 
-          {idiom.meaning_options.map((option, i) => (
-            <motion.button
-              className="block mb-2 z-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                setSelectedMeaningIndex(i);
-                setCurrentStepIndex(currentStepIndex + 1);
-              }}
-            >
-              {option}
-            </motion.button>
-          ))}
-        </div>
+            {idiom.meaning_options.map((option, i) => (
+              <motion.button
+                className="block mb-2 z-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  setSelectedMeaningIndex(i);
+                  setCurrentStepIndex(currentStepIndex + 1);
+                }}
+              >
+                {option}
+              </motion.button>
+            ))}
+          </div>
+        )}
       </Slide>
 
       <Slide index={2} shownIndex={currentStepIndex}>
@@ -154,13 +156,13 @@ function Content() {
 
       <Slide index={3} shownIndex={currentStepIndex}>
         {currentStepIndex === 3 && (
-          <div className="h-full flex items-center justify-center">
+          <div className="h-[100vh] flex items-center justify-center">
             <motion.div
               className="w-[50px] h-[50px] bg-red-500"
               animate={{
                 scale: [1, 2, 2, 1, 1],
                 rotate: [0, 0, 180, 180, 0],
-                borderRadius: ["0%", "0%", "50%", "50%", "0%"]
+                borderRadius: ["5%", "5%", "50%", "50%", "5%"]
               }}
               transition={{
                 duration: 2,
