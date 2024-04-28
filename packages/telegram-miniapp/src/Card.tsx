@@ -21,7 +21,7 @@ export const Card = ({
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="Card absolute w-full"
+          className="Card w-full"
         >
           {children}
         </motion.div>

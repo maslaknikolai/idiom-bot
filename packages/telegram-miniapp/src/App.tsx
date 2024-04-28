@@ -9,7 +9,7 @@ const idiomAtom = atom({
   imageUrl: "https://maslaknikolai.github.io/idiom-bot/crying_over_spilled_milk.jpg",
 });
 
-const step = atom(1);
+const stepAtom = atom(1);
 
 const useImageLoader = (src: string) => {
   const [image, setImage] = useState<string | undefined>(undefined);
@@ -27,66 +27,38 @@ const useImageLoader = (src: string) => {
 }
 
 function App() {
-  const [currentStep, setCurrentStep] = useAtom(step);
+  const [currentStep, setCurrentStep] = useAtom(stepAtom);
   const [idiom] = useAtom(idiomAtom);
-  const nextStep = () => setCurrentStep((s) => s + 1);
-
   const idiomImage = useImageLoader(idiom.imageUrl);
-  const isImageLoaded = !!idiomImage;
 
   return (
-    <div className="m-auto p-2 relative w-full max-w-[550px]">
-      <Card isShown={isImageLoaded && currentStep === 1}>
-        <>
-        <div className="First h-80 flex flex-col justify-center relative">
+    <div className="p-2 overflow-hidden relative flex">
+      <Card isShown={!!idiomImage && currentStep === 1}>
+        <div className="flex flex-col justify-center items-center relative h-80">
           <div className="Background absolute w-full h-full rounded-xl overflow-hidden -z-10 bg-black">
-            <img
-              src={idiomImage}
-              // test
-              alt={idiom.title}
-              className="w-full h-full object-cover opacity-50"
-            />
+            <img src={idiomImage} alt={idiom.title} className="w-full h-full object-cover opacity-50" />
           </div>
-
-          <div className="Content p-2">
-            <p className="pt-10">
-              Ideom of the day
-            </p>
-
-            <h1 className="Idiom text-5xl leading-tight fotn-bold text-white text-center drop-shadow-lg items-center">
-              {idiom.title}
-            </h1>
-
-            <div className="flex p-2 justify-end w-full">
-              <motion.button
-                className="button z-10"
-                onClick={nextStep}
-                whileHover={{
-                  scale: 1.1,
-                  backgroundColor: "#ff0000",
-                }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Okay
-              </motion.button>
-            </div>
-          </div>
-
+          <p className="z-10 text-white text-lg pt-10">Idiom of the day</p>
+          <h1 className="z-10 text-white text-5xl font-bold text-center drop-shadow-lg my-2">
+            {idiom.title}
+          </h1>
+          <motion.button
+            className="z-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            onClick={() => setCurrentStep(currentStep + 1)}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Okay
+          </motion.button>
         </div>
-        </>
       </Card>
 
       <Card isShown={currentStep === 2}>
-        <div className="flex flex-col items-center">
-          <h1 className="text-2xl font-bold text-center">
-            Did you know?
-          </h1>
-          <p className="text-lg text-center">
-            This idiom is used to ask someone what they are thinking about.
-          </p>
-          <button
-            className="button"
-            onClick={nextStep}
+        <div className="flex flex-col items-center p-4">
+          <h1 className="text-2xl font-bold">Did you know?</h1>
+          <p>This idiom is used to ask someone what they are thinking about.</p>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4"
+            onClick={() => setCurrentStep(currentStep + 1)}
           >
             Next
           </button>
@@ -95,5 +67,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;
