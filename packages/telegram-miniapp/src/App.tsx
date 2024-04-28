@@ -6,7 +6,7 @@ import { Card } from "./Card";
 const idiomAtom = atom({
   id: 1,
   title: "A penny for your thoughts",
-  imageUrl: "/crying_over_spilled_milk.jpg",
+  imageUrl: "https://maslaknikolai.github.io/idiom-bot/crying_over_spilled_milk.jpg",
 });
 
 const step = atom(1);
@@ -42,6 +42,7 @@ function App() {
           <div className="Background absolute w-full h-full rounded-xl overflow-hidden -z-10 bg-black">
             <img
               src={idiomImage}
+              // test
               alt={idiom.title}
               className="w-full h-full object-cover opacity-50"
             />
