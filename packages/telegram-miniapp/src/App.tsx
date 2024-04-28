@@ -16,6 +16,8 @@ const idiomAtom = atom<Idiom | null>(null);
 const stepIndexAtom = atom(0);
 const selectedMeaningIndexAtom = atom<number | null>(null);
 const selectedUsageIndexAtom = atom<number | null>(null);
+const isSendingAtom = atom(false);
+const meaningAtom = atom<string | null>(null);
 
 const useImageLoader = (src: string | undefined) => {
   const [image, setImage] = useState<string | undefined>(undefined);
@@ -71,10 +73,8 @@ export default function App() {
 function Content() {
   const [idiom] = useAtom(idiomAtom);
   const [currentStepIndex, setCurrentStepIndex] = useAtom(stepIndexAtom);
-  const [selectedMeaningIndex, setSelectedMeaningIndex] = useAtom(selectedMeaningIndexAtom);
-  const [selectedUsageIndex, setSelectedUsageIndex] = useAtom(selectedUsageIndexAtom);
-
-  console.log(selectedMeaningIndex, selectedUsageIndex);
+  const [, setSelectedMeaningIndex] = useAtom(selectedMeaningIndexAtom);
+  const [, setSelectedUsageIndex] = useAtom(selectedUsageIndexAtom);
 
   if (!idiom) {
     return null;
@@ -156,27 +156,79 @@ function Content() {
 
       <Slide index={3} shownIndex={currentStepIndex}>
         {currentStepIndex === 3 && (
-          <div className="flex items-center justify-center min-h-[500px]">
-            <motion.div
-              className="w-[50px] h-[50px] bg-red-500"
-              animate={{
-                scale: [1, 2, 2, 1, 1],
-                rotate: [0, 0, 180, 180, 0],
-                borderRadius: ["10%", "10%", "50%", "50%", "10%"],
-                filter: ["blur(0px)", "blur(0px)", "blur(100px)", "blur(100px)", "blur(0px)"]
-              }}
-              transition={{
-                duration: 2,
-                ease: "easeInOut",
-                times: [0, 0.2, 0.5, 0.8, 1],
-                repeat: Infinity,
-                repeatDelay: 1
-              }}
-            />
-          </div>
+          <UploadOptionsAnswers />
+        )}
+      </Slide>
+
+      <Slide index={4} shownIndex={currentStepIndex}>
+        {currentStepIndex === 4 && (
+          <Meaning />
         )}
       </Slide>
     </div>
   );
 }
 
+
+function UploadOptionsAnswers() {
+  const [selectedMeaningIndex, setSelectedMeaningIndex] = useAtom(selectedMeaningIndexAtom);
+  const [selectedUsageIndex, setSelectedUsageIndex] = useAtom(selectedUsageIndexAtom);
+  const [,setIsSending] = useAtom(isSendingAtom);
+  const [, setMeaning] = useAtom(meaningAtom);
+  const [, setCurrentStepIndex] = useAtom(stepIndexAtom);
+
+  useEffect(() => {
+    setIsSending(true);
+
+    const t = setTimeout(() => {
+      console.log("Sending data to the server", selectedMeaningIndex, selectedUsageIndex);
+
+      setIsSending(false);
+      setSelectedMeaningIndex(null);
+      setSelectedUsageIndex(null);
+
+      setMeaning("It's a phrase that means something else than the literal meaning of the words.");
+      setCurrentStepIndex(4)
+    }, 3000)
+
+    return () => clearTimeout(t);
+  }, []);
+
+    return (
+      <div className="flex items-center justify-center min-h-[500px]">
+        <motion.div
+          className="w-[50px] h-[50px] bg-red-500"
+          animate={{
+            scale: [1, 2, 2, 1, 1],
+            rotate: [0, 0, 180, 180, 0],
+            borderRadius: ["10%", "10%", "50%", "50%", "10%"],
+            filter: ["blur(0px)", "blur(0px)", "blur(100px)", "blur(100px)", "blur(0px)"]
+          }}
+          transition={{
+            duration: 2,
+            ease: "easeInOut",
+            times: [0, 0.2, 0.5, 0.8, 1],
+            repeat: Infinity,
+            repeatDelay: 1
+          }}
+        />
+      </div>
+    )
+}
+
+function Meaning() {
+  const [idiom] = useAtom(idiomAtom);
+  const [meaning] = useAtom(meaningAtom);
+
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4 text-center">
+        {idiom?.text}
+      </h1>
+
+      {meaning && (
+        <p className="text-lg text-center">{meaning}</p>
+      )}
+    </div>
+  );
+}
