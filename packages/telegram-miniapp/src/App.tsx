@@ -162,7 +162,8 @@ function Content() {
               animate={{
                 scale: [1, 2, 2, 1, 1],
                 rotate: [0, 0, 180, 180, 0],
-                borderRadius: ["5%", "5%", "50%", "50%", "5%"]
+                borderRadius: ["10%", "10%", "50%", "50%", "10%"],
+                filter: ["blur(0px)", "blur(0px)", "blur(100px)", "blur(100px)", "blur(0px)"]
               }}
               transition={{
                 duration: 2,
