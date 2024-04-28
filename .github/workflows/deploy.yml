@@ -25,6 +25,8 @@ jobs:
 
       - name: Build package
         run: yarn workspace telegram-miniapp build
+        env:
+          API_URL: ${{ secrets.API_URL }}
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
