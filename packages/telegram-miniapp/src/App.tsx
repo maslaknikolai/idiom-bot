@@ -154,7 +154,7 @@ function Content() {
         {currentStepIndex === 3 && (
           <div className="h-full flex items-center justify-center">
             <motion.div
-              className="w-[50px] h-[50px] bg-[#9900ff]"
+              className="w-[50px] h-[50px] bg-red-500"
               animate={{
                 scale: [1, 2, 2, 1, 1],
                 rotate: [0, 0, 180, 180, 0],
