@@ -4,18 +4,24 @@ import { useEffect, useState } from "react";
 import { Card } from "./Card";
 import { Username } from "./Username";
 
-const idiomAtom = atom({
-  id: 1,
-  title: "A penny for your thoughts",
-  imageUrl: "https://maslaknikolai.github.io/idiom-bot/crying_over_spilled_milk.jpg",
-});
+type Idiom = {
+    id: number,
+    title: string,
+    imageUrl: string,
+}
+
+const idiomAtom = atom<Idiom | null>(null);
 
 const stepAtom = atom(1);
 
-const useImageLoader = (src: string) => {
+const useImageLoader = (src: string | undefined) => {
   const [image, setImage] = useState<string | undefined>(undefined);
 
   useEffect(() => {
+    if (!src) {
+      return;
+    }
+
     const img = new Image();
     img.src = src;
     img.onload = () => setImage(src);
@@ -29,8 +35,9 @@ const useImageLoader = (src: string) => {
 
 function App() {
   const [currentStep, setCurrentStep] = useAtom(stepAtom);
-  const [idiom] = useAtom(idiomAtom);
-  const idiomImage = useImageLoader(idiom.imageUrl);
+  const [idiom, setIdiom] = useAtom(idiomAtom);
+  const [error, setError] = useState<string | null>(null);
+  const idiomImage = useImageLoader(idiom?.imageUrl);
 
   useEffect(() => {
     fetchUserName()
@@ -40,10 +47,14 @@ function App() {
       const groupChatId = Telegram.WebApp.initDataUnsafe.start_param;
       const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/game-data?initData=${initData}&groupChatId=${groupChatId}`);
       const data = await response.json();
-      // setUserName(data.username);
-      console.log(initData, data);
+      setIdiom(data.idiom)
+      setError(data.error)
     }
   }, []);
+
+  if (error) {
+    return <>{error}</>;
+  }
 
   return (
     <div className="p-2">
@@ -51,14 +62,14 @@ function App() {
 
       <div className="overflow-hidden relative flex">
 
-        <Card isShown={!!idiomImage && currentStep === 1}>
+        <Card isShown={!!idiomImage && currentStep === 1 && !!idiom}>
           <div className="flex flex-col justify-center items-center relative h-80">
             <div className="Background absolute w-full h-full rounded-xl overflow-hidden -z-10 bg-black">
-              <img src={idiomImage} alt={idiom.title} className="w-full h-full object-cover opacity-50" />
+              <img src={idiomImage} alt={idiom?.title} className="w-full h-full object-cover opacity-50" />
             </div>
             <p className="z-10 text-white text-lg pt-10">Idiom of the day</p>
             <h1 className="z-10 text-white text-5xl font-bold text-center drop-shadow-lg my-2">
-              {idiom.title}
+              {idiom?.title}
             </h1>
             <motion.button
               className="z-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
