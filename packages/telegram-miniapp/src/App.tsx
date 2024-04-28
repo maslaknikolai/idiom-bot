@@ -110,6 +110,7 @@ function Content() {
         <div className="flex flex-col items-center p-4">
           <h1 className="text-2xl font-bold mb-4">
             Guess the meaning of the idiom
+            "{idiom.text}"
           </h1>
 
           {idiom.meaning_options.map((option, i) => (
@@ -132,6 +133,7 @@ function Content() {
         <div className="flex flex-col items-center p-4">
           <h1 className="text-2xl font-bold mb-4">
             Guess the correct usage of the idiom
+            "{idiom.text}"
           </h1>
 
           {idiom.usage_options.map((option, i) => (
