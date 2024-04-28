@@ -45,7 +45,7 @@ function App() {
     async function fetchUserName() {
       const initData = Telegram?.WebApp?.initData;
       const groupChatId = Telegram.WebApp.initDataUnsafe.start_param;
-      const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/game-data?initData=${initData}&groupChatId=${groupChatId}`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/game-data?initData=${encodeURIComponent(initData)}&groupChatId=${groupChatId}`);
       const data = await response.json();
       setIdiom(data.idiom)
       setError(data.error)
