@@ -36,7 +36,7 @@ const useImageLoader = (src: string | undefined) => {
 function App() {
   const [idiom, setIdiom] = useAtom(idiomAtom);
   const [error, setError] = useState<string | null>(null);
-  const idiomImage = useImageLoader(idiom?.imageUrl);
+  const idiomLoadedImage = useImageLoader(idiom?.imageUrl);
 
   useEffect(() => {
     fetchIdiom()
@@ -45,7 +45,7 @@ function App() {
       const initData = new URLSearchParams(window.location.search).get('initData') || Telegram.WebApp?.initData
       const groupChatId = new URLSearchParams(window.location.search).get('groupChatId') || Telegram.WebApp.initDataUnsafe.start_param;
 
-      const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/game-data?initData=${encodeURIComponent(initData)}&groupChatId=${groupChatId}`);
+      const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/game-data?&groupChatId=${groupChatId}&initData=${encodeURIComponent(initData)}`);
       const data = await response.json();
       setIdiom(data.idiom)
       setError(data.error)
@@ -60,7 +60,7 @@ function App() {
     <div className="p-2">
       <Username />
 
-      {idiom && idiomImage && (
+      {idiom && idiomLoadedImage && (
         <Content />
       )}
     </div>
@@ -77,7 +77,6 @@ function Content() {
 
   return (
     <div className="overflow-hidden relative flex">
-
       <Card isShown={currentStep === 1}>
         {idiom && (
           <div className="flex flex-col justify-center items-center relative h-80">
