@@ -1,0 +1,220 @@
+[{
+  "_id": {
+    "$oid": "662e8e046823a4d724e633a5"
+  },
+  "text": "Crying over spilled milk",
+  "image_url": "https://maslaknikolai.github.io/idiom-bot/crying_over_spilled_milk.webp",
+  "meaning_options": [
+    {
+      "text": "Complaining about bad weather.",
+      "is_correct": false
+    },
+    {
+      "text": "Regretting something that cannot be changed.",
+      "is_correct": true
+    },
+    {
+      "text": "Crying over something important that is lost.",
+      "is_correct": false
+    },
+    {
+      "text": "Blaming others for one's own mistakes.",
+      "is_correct": false
+    }
+  ],
+  "usage_options": [
+    {
+      "text": "He is crying over spilled milk because he cannot find his favorite socks.",
+      "is_correct": false
+    },
+    {
+      "text": "After losing the championship game, the team was just crying over spilled milk.",
+      "is_correct": true
+    },
+    {
+      "text": "When she spilled her coffee, she was literally crying over spilled milk.",
+      "is_correct": false
+    },
+    {
+      "text": "He often cries over spilled milk, even when things go slightly wrong in his plans.",
+      "is_correct": false
+    }
+  ],
+  "is_used": true
+},
+{
+  "_id": {
+    "$oid": "6631573e81c9f5d774b30a60"
+  },
+  "text": "Bite the bullet",
+  "image_url": "https://maslaknikolai.github.io/idiom-bot/9fc52ae4-943d-49ab-bf5c-96c6d930eb0a.webp",
+  "meaning_options": [
+    {
+      "text": "To literally bite a bullet.",
+      "is_correct": false
+    },
+    {
+      "text": "To accept something difficult or unpleasant.",
+      "is_correct": true
+    },
+    {
+      "text": "To bite into something very hard.",
+      "is_correct": false
+    },
+    {
+      "text": "To start a difficult task with great energy.",
+      "is_correct": false
+    }
+  ],
+  "usage_options": [
+    {
+      "text": "Knowing the potential backlash, he bit the bullet and told the truth.",
+      "is_correct": true
+    },
+    {
+      "text": "When it's time to clean up after dinner, he always bites the bullet.",
+      "is_correct": false
+    },
+    {
+      "text": "She bit the bullet at the dentist's office during her procedure.",
+      "is_correct": false
+    },
+    {
+      "text": "He will have to bite the bullet and invest more to see results.",
+      "is_correct": false
+    }
+  ],
+  "is_used": false
+},
+{
+  "_id": {
+    "$oid": "663157b781c9f5d774b30a61"
+  },
+  "text": "Break the ice",
+  "image_url": "https://maslaknikolai.github.io/idiom-bot/1.webp",
+  "meaning_options": [
+    {
+      "text": "To shatter frozen water.",
+      "is_correct": false
+    },
+    {
+      "text": "To initiate a conversation in a social setting.",
+      "is_correct": true
+    },
+    {
+      "text": "To break something made of ice.",
+      "is_correct": false
+    },
+    {
+      "text": "To start a physical fight.",
+      "is_correct": false
+    }
+  ],
+  "usage_options": [
+    {
+      "text": "At the start of the workshop, the facilitator told a joke to break the ice.",
+      "is_correct": true
+    },
+    {
+      "text": "During the winter, he often breaks the ice on the walkway.",
+      "is_correct": false
+    },
+    {
+      "text": "The comedian used his best jokes to break the ice with the audience.",
+      "is_correct": false
+    },
+    {
+      "text": "She broke the ice of the frozen lake to rescue the trapped fish.",
+      "is_correct": false
+    }
+  ],
+  "is_used": false
+},
+{
+  "_id": {
+    "$oid": "663158c081c9f5d774b30a6b"
+  },
+  "text": "Burn the midnight oil",
+  "image_url": "https://maslaknikolai.github.io/idiom-bot/ebd36e5e-0ede-4dde-ab2d-cbd7f0aa2ed0.webp",
+  "meaning_options": [
+    {
+      "text": "To stay up very late at night working or studying.",
+      "is_correct": true
+    },
+    {
+      "text": "To waste energy in an unproductive way.",
+      "is_correct": false
+    },
+    {
+      "text": "To participate in night time leisure activities.",
+      "is_correct": false
+    },
+    {
+      "text": "To light a lamp using oil.",
+      "is_correct": false
+    }
+  ],
+  "usage_options": [
+    {
+      "text": "She burned the midnight oil to finish her thesis on time.",
+      "is_correct": true
+    },
+    {
+      "text": "The team burned the midnight oil to meet the project deadline.",
+      "is_correct": true
+    },
+    {
+      "text": "He often burns the midnight oil playing video games, not studying.",
+      "is_correct": false
+    },
+    {
+      "text": "To prepare for the finals, students are burning the midnight oil at the library.",
+      "is_correct": true
+    }
+  ],
+  "is_used": false
+},
+{
+  "_id": {
+    "$oid": "66315b7981c9f5d774b30a6c"
+  },
+  "text": "Bigger fish to fry",
+  "image_url": "https://maslaknikolai.github.io/idiom-bot/photo_2024-04-22_21-58-42.jpg",
+  "meaning_options": [
+    {
+      "text": "Cooking a large fish for dinner.",
+      "is_correct": false
+    },
+    {
+      "text": "Having more important matters to attend to.",
+      "is_correct": true
+    },
+    {
+      "text": "Looking for bigger opportunities in life.",
+      "is_correct": false
+    },
+    {
+      "text": "Trying to solve big problems.",
+      "is_correct": false
+    }
+  ],
+  "usage_options": [
+    {
+      "text": "He didn’t attend the meeting, as he had bigger fish to fry.",
+      "is_correct": true
+    },
+    {
+      "text": "She always dreams about bigger fish to fry instead of focusing on her current tasks.",
+      "is_correct": false
+    },
+    {
+      "text": "During the fishing trip, they literally had bigger fish to fry.",
+      "is_correct": false
+    },
+    {
+      "text": "Managing the new project is like having bigger fish to fry compared to his previous tasks.",
+      "is_correct": false
+    }
+  ],
+  "is_used": false
+}]
