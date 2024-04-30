@@ -15,6 +15,9 @@ console.log('API_URL', process.env.API_URL);
 export default defineConfig({
   plugins: [react()],
   base: '/idiom-bot/',
+  server: {
+    open: true,
+  },
   define: {
     'import.meta.env.VITE_API_URL': JSON.stringify(process.env.API_URL),
   }

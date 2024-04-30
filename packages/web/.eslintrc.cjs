@@ -66,6 +66,9 @@ module.exports = {
           },
         },
       },
+      rules: {
+        "@typescript-eslint/no-explicit-any":['warn'],
+      },
       extends: [
         "plugin:@typescript-eslint/recommended",
         "plugin:import/recommended",

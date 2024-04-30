@@ -9,12 +9,16 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "yarn workspaces foreach --all --parallel run dev",
     "build": "yarn workspaces foreach --all --interlaced run build",
-    "start": "yarn workspaces foreach --all --parallel --interlaced run start"
+    "start": "yarn workspaces foreach --all --parallel --interlaced run start",
+    "q": "yarn workspace telegram-miniapp dev",
+    "w": "yarn workspace web dev",
+    "e": "yarn workspace telegram-bot dev",
+    "dev": "yarn workspaces foreach --all --parallel run dev"
   },
   "packageManager": "yarn@4.1.1",
   "dependencies": {
-    "jotai": "^2.8.0"
+    "jotai": "^2.8.0",
+    "node-fetch": "^3.3.2"
   }
 }

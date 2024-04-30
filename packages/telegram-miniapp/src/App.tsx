@@ -1,6 +1,6 @@
 import { atom, useAtom } from "jotai";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Slide } from "./Card";
 
 type Idiom = {
@@ -18,6 +18,7 @@ const selectedMeaningIndexAtom = atom<number | null>(null);
 const selectedUsageIndexAtom = atom<number | null>(null);
 const isSendingAtom = atom(false);
 const meaningAtom = atom<string | null>(null);
+const errorAtom = atom<string | null>(null);
 
 const useImageLoader = (src: string | undefined) => {
   const [image, setImage] = useState<string | undefined>(undefined);
@@ -39,9 +40,9 @@ const useImageLoader = (src: string | undefined) => {
 }
 
 export default function App() {
-  const [idiom, setIdiom] = useAtom(idiomAtom);
-  const [error, setError] = useState<string | null>(null);
-  const idiomLoadedImage = useImageLoader(idiom?.image_url);
+  const [, setIdiom] = useAtom(idiomAtom);
+  const [, setError] = useAtom(errorAtom);
+  const [, setCurrentStepIndex] = useAtom(stepIndexAtom);
 
   useEffect(() => {
     fetchIdiom()
@@ -52,20 +53,19 @@ export default function App() {
 
       const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/game-data?&groupChatId=${groupChatId}&initData=${encodeURIComponent(initData)}`);
       const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || 'HTTP error!');
+        setCurrentStepIndex(5);
+      }
+
       setIdiom(data.idiom)
-      setError(data.error)
     }
   }, []);
 
-  if (error) {
-    return <>{error}</>;
-  }
-
   return (
     <div>
-      {idiom && idiomLoadedImage && (
-        <Content />
-      )}
+      <Content />
     </div>
   );
 }
@@ -76,10 +76,7 @@ function Content() {
   const [, setSelectedMeaningIndex] = useAtom(selectedMeaningIndexAtom);
   const [, setSelectedUsageIndex] = useAtom(selectedUsageIndexAtom);
 
-  if (!idiom) {
-    return null;
-  }
-
+  const idiomLoadedImage = useImageLoader(idiom?.image_url);
   return (
     <div className="overflow-hidden relative flex">
       <Slide index={0} shownIndex={currentStepIndex}>
@@ -87,7 +84,9 @@ function Content() {
           <div className="p-4">
             <div className="flex flex-col justify-center items-center relative h-80">
               <div className="Background absolute w-full h-full rounded-xl overflow-hidden -z-10 bg-black">
-                <img src={idiom.image_url} alt={idiom.text} className="w-full h-full object-cover opacity-50" />
+                {idiomLoadedImage &&
+                  <img src={idiom.image_url} alt={idiom.text} className="w-full h-full object-cover opacity-50" />
+                }
               </div>
               <p className="z-10 text-white text-lg pt-10">Idiom of the day</p>
               <h1 className="z-10 text-white text-5xl font-bold text-center drop-shadow-lg my-2">
@@ -111,10 +110,10 @@ function Content() {
           <div className="p-4">
             <h1 className="text-2xl font-bold mb-4 text-center">
               Guess the meaning of the idiom
-              "{idiom.text}"
+              "{idiom?.text}"
             </h1>
 
-            {idiom.meaning_options.map((option, i) => (
+            {idiom?.meaning_options.map((option, i) => (
               <motion.button
                 className="block w-full mb-2 z-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                 whileHover={{ scale: 1.1 }}
@@ -135,10 +134,10 @@ function Content() {
         <div className="p-4">
           <h1 className="text-2xl font-bold mb-4 text-center">
             Guess the correct usage of the idiom
-            "{idiom.text}"
+            "{idiom?.text}"
           </h1>
 
-          {idiom.usage_options.map((option, i) => (
+          {idiom?.usage_options.map((option, i) => (
             <motion.button
               className="block w-full mb-2 z-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
               whileHover={{ scale: 1.1 }}
@@ -165,33 +164,70 @@ function Content() {
           <Meaning />
         )}
       </Slide>
+
+      <Slide index={5} shownIndex={currentStepIndex}>
+        {currentStepIndex === 5 && (
+          <Error />
+        )}
+      </Slide>
     </div>
   );
 }
 
 
 function UploadOptionsAnswers() {
-  const [selectedMeaningIndex, setSelectedMeaningIndex] = useAtom(selectedMeaningIndexAtom);
-  const [selectedUsageIndex, setSelectedUsageIndex] = useAtom(selectedUsageIndexAtom);
+  const [selectedMeaningIndex] = useAtom(selectedMeaningIndexAtom);
+  const [selectedUsageIndex] = useAtom(selectedUsageIndexAtom);
   const [,setIsSending] = useAtom(isSendingAtom);
   const [, setMeaning] = useAtom(meaningAtom);
+  const [, setError] = useAtom(errorAtom);
   const [, setCurrentStepIndex] = useAtom(stepIndexAtom);
+
+  const { groupChatId, initData } = useTelegramWebAppData()
 
   useEffect(() => {
     setIsSending(true);
 
     const t = setTimeout(() => {
-      console.log("Sending data to the server", selectedMeaningIndex, selectedUsageIndex);
-
-      setIsSending(false);
-      setSelectedMeaningIndex(null);
-      setSelectedUsageIndex(null);
-
-      setMeaning("It's a phrase that means something else than the literal meaning of the words.");
-      setCurrentStepIndex(4)
-    }, 3000)
+      postTradeGuessesToMeaning()
+    }, 1000)
 
     return () => clearTimeout(t);
+
+    async function postTradeGuessesToMeaning() {
+      try {
+        setIsSending(true);
+
+        const response = await fetch(`${import.meta.env.VITE_API_URL || ''}/api/trade-guesses-to-meaning?groupChatId=${groupChatId}&initData=${encodeURIComponent(initData)}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            meaningGuessIndex: selectedMeaningIndex,
+            usageGuessIndex: selectedUsageIndex,
+          }),
+        });
+
+        if (!response.ok) {
+          // get data.error from response
+          const data = await response.json();
+          setError(data.error || 'HTTP error!');
+          return setCurrentStepIndex(5);
+        }
+
+        const data = await response.json();
+        const meaning = data.correctMeaning;
+
+        setMeaning(meaning);
+        setCurrentStepIndex(4);
+      } catch (error) {
+        setCurrentStepIndex(5);
+        setError('Something went wrong! Please try again later.');
+      } finally {
+        setIsSending(false);
+      }
+    }
   }, []);
 
     return (
@@ -226,9 +262,49 @@ function Meaning() {
         {idiom?.text}
       </h1>
 
-      {meaning && (
-        <p className="text-lg text-center">{meaning}</p>
-      )}
+      <p className="text-lg text-center">
+        Means: {meaning}
+      </p>
+
+      <motion.button
+        className="block w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        Close
+      </motion.button>
     </div>
   );
+}
+
+function Error() {
+  const [error] = useAtom(errorAtom);
+
+  return (
+    <div className="p-4">
+      <h1 className="text-2xl font-bold mb-4 text-center">
+        Sorry, something went wrong
+      </h1>
+
+      <p className="text-lg text-center">
+        {error}
+      </p>
+
+      <motion.button
+        className="block w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => Telegram.WebApp.close()}
+      >
+        Close
+      </motion.button>
+    </div>
+  );
+}
+
+function useTelegramWebAppData() {
+  const initData = new URLSearchParams(window.location.search).get('initData') || Telegram.WebApp?.initData
+  const groupChatId = new URLSearchParams(window.location.search).get('groupChatId') || Telegram.WebApp.initDataUnsafe.start_param;
+
+  return useMemo(() => ({ initData, groupChatId }), [initData, groupChatId]);
 }

@@ -12,10 +12,11 @@ export interface Chat {
   name: string;
   players: Player[];
   games: Game[];
+  createdAt?: Date;
 }
 
 export const playerSchema = new mongoose.Schema<Player>({
-  tg_id: { type: Number, ref: 'Player', required: true },
+  tg_id: { type: Number, required: true },
   name: { type: String, required: true }
 });
 
@@ -24,6 +25,6 @@ export const chatSchema = new mongoose.Schema<Chat & Document>({
   name: { type: String, required: true },
   players: [playerSchema],
   games: [gameSchema]
-});
+}, { timestamps: true });
 
 export const ChatModel = mongoose.model<Chat>('Chat', chatSchema);
