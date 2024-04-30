@@ -13,7 +13,7 @@ export async function updateDailyIdiom() {
     const idiom = await IdiomModel.findOne({is_used: false})
 
     if (!idiom) {
-      return handleError('No idiom found');
+      return handleError('No unused idiom found');
     }
 
     idiom.is_used = true;

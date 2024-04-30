@@ -270,6 +270,7 @@ function Meaning() {
         className="block w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
+        onClick={() => Telegram.WebApp.close()}
       >
         Close
       </motion.button>
