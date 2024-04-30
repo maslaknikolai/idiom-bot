@@ -82,6 +82,11 @@ async function createBot() {
     }
   });
 
+  bot.command('set_new_idiom', async (ctx) => {
+    updateDailyIdiom(true)
+    ctx.reply('Updating daily idiom...');
+  })
+
   bot.on('text', (ctx) => {
     console.log('On message', ctx);
     ctx.reply(JSON.stringify(ctx.update, null, 2));

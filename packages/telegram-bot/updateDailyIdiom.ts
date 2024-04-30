@@ -1,9 +1,9 @@
 import { AppConfig, AppConfigModel, ChatModel, IdiomModel } from "shared";
 import { logToAdmin } from "./logToAdmin";
 
-export async function updateDailyIdiom() {
+export async function updateDailyIdiom(forced = false) {
   try {
-    const shouldUpdateIdiom = await checkShouldUpdateIdiom();
+    const shouldUpdateIdiom = forced || await checkShouldUpdateIdiom();
 
     if (!shouldUpdateIdiom) {
       console.log('No need to update idiom', new Date());
