@@ -269,22 +269,28 @@ function Meaning() {
 
   return (
     <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4 text-center">
-        {idiom?.text}
-      </h1>
+      <div className="flex flex-col justify-center items-center relative h-80">
+        <div className="Background absolute w-full h-full rounded-xl overflow-hidden -z-10 bg-black">
+          <img src={idiom?.image_url} alt={idiom?.text} className="w-full h-full object-cover opacity-50" />
+        </div>
 
-      <p className="text-lg text-center">
-        Means: {meaning}
-      </p>
+        <h1 className="z-10 text-white text-5xl font-bold text-center drop-shadow-lg my-2">
+          {idiom?.text}
+        </h1>
 
-      <motion.button
-        className="block w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-4"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => Telegram.WebApp.close()}
-      >
-        Close
-      </motion.button>
+        <p className="z-10 text-white text-2xl font-bold text-center drop-shadow-lg my-2">
+          {meaning}
+        </p>
+
+        <motion.button
+          className="z-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+          onClick={() => Telegram.WebApp.close()}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Cool
+        </motion.button>
+      </div>
     </div>
   );
 }
