@@ -1,13 +1,13 @@
 import mongoose from 'mongoose';
 
 export interface AppConfig {
-  idiomId?: mongoose.Types.ObjectId;
-  dateActivated?: Date;
+  idiom_id?: mongoose.Types.ObjectId;
+  idiom_updated_at?: Date;
 }
 
 const appConfigSchema = new mongoose.Schema({
-  idiomId: { type: mongoose.Schema.Types.ObjectId, ref: 'Idiom' },
-  dateActivated: { type: Date }
+  idiom_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Idiom' },
+  idiom_updated_at: { type: Date }
 });
 
 export const AppConfigModel = mongoose.model<AppConfig>('AppConfig', appConfigSchema);

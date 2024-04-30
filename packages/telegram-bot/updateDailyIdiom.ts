@@ -22,8 +22,8 @@ export async function updateDailyIdiom() {
 
     const existingAppConfig = await AppConfigModel.findOne()
     if (existingAppConfig) {
-      existingAppConfig.idiomId = idiom._id;
-      existingAppConfig.dateActivated = new Date();
+      existingAppConfig.idiom_id = idiom._id;
+      existingAppConfig.idiom_updated_at = new Date();
 
       await existingAppConfig.save();
     } else {
@@ -31,8 +31,8 @@ export async function updateDailyIdiom() {
       logToAdmin('Creating new AppConfig');
 
       await AppConfigModel.create({
-        idiomId: idiom._id,
-        dateActivated: new Date()
+        idiom_id: idiom._id,
+        idiom_updated_at: new Date()
       } satisfies AppConfig);
     }
 
@@ -43,12 +43,11 @@ export async function updateDailyIdiom() {
       const existingAppConfig = await AppConfigModel.findOne()
 
       const now = new Date();
-      const lastUpdated = existingAppConfig?.dateActivated || new Date(0);
+      const lastUpdated = existingAppConfig?.idiom_updated_at || new Date(0);
       const diff = now.getTime() - lastUpdated.getTime();
       const DAY_IN_MS = 1000 * 60 * 60 * 24;
-      const diffInDays = diff / (DAY_IN_MS);
 
-      return diffInDays >= 1;
+      return diff > DAY_IN_MS;
     }
   } catch (error) {
     return handleError('Unhandled error: `updateDailyIdiom`');
