@@ -76,33 +76,44 @@ function Content() {
   const [, setSelectedMeaningIndex] = useAtom(selectedMeaningIndexAtom);
   const [, setSelectedUsageIndex] = useAtom(selectedUsageIndexAtom);
 
-  const idiomLoadedImage = useImageLoader(idiom?.image_url);
   return (
     <div className="overflow-hidden relative flex">
       <Slide index={0} shownIndex={currentStepIndex}>
-        {currentStepIndex === 0 && idiom && (
-          <div className="p-4">
-            <div className="flex flex-col justify-center items-center relative h-80">
-              <div className="Background absolute w-full h-full rounded-xl overflow-hidden -z-10 bg-black">
-                {idiomLoadedImage &&
-                  <img src={idiom.image_url} alt={idiom.text} className="w-full h-full object-cover opacity-50" />
-                }
+        <>
+          {!idiom ? (
+            <>
+              <div className="p-4">
+                <h1 className="text-2xl font-bold mb-4 text-center">
+                  Loading...
+                </h1>
               </div>
-              <p className="z-10 text-white text-lg pt-10">Idiom of the day</p>
-              <h1 className="z-10 text-white text-5xl font-bold text-center drop-shadow-lg my-2">
-                {idiom.text}
-              </h1>
-              <motion.button
-                className="z-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                onClick={() => setCurrentStepIndex(currentStepIndex + 1)}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Okay
-              </motion.button>
-            </div>
-          </div>
-        )}
+            </>
+          ) : (
+            <>
+              {currentStepIndex === 0 && idiom && (
+                <div className="p-4">
+                  <div className="flex flex-col justify-center items-center relative h-80">
+                    <div className="Background absolute w-full h-full rounded-xl overflow-hidden -z-10 bg-black">
+                      <img src={idiom.image_url} alt={idiom.text} className="w-full h-full object-cover opacity-50" />
+                    </div>
+                    <p className="z-10 text-white text-lg pt-10">Idiom of the day</p>
+                    <h1 className="z-10 text-white text-5xl font-bold text-center drop-shadow-lg my-2">
+                      {idiom.text}
+                    </h1>
+                    <motion.button
+                      className="z-10 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                      onClick={() => setCurrentStepIndex(currentStepIndex + 1)}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      Okay
+                    </motion.button>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </>
       </Slide>
 
       <Slide index={1} shownIndex={currentStepIndex}>
