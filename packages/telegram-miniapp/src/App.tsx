@@ -1,6 +1,6 @@
 import { atom, useAtom } from "jotai";
 import { motion } from "framer-motion";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { Slide } from "./Card";
 
 type Idiom = {
@@ -19,25 +19,6 @@ const selectedUsageIndexAtom = atom<number | null>(null);
 const isSendingAtom = atom(false);
 const meaningAtom = atom<string | null>(null);
 const errorAtom = atom<string | null>(null);
-
-const useImageLoader = (src: string | undefined) => {
-  const [image, setImage] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    if (!src) {
-      return;
-    }
-
-    const img = new Image();
-    img.src = src;
-    img.onload = () => setImage(src);
-    return () => {
-      img.onload = null;
-    };
-  }, [src]);
-
-  return image;
-}
 
 export default function App() {
   const [, setIdiom] = useAtom(idiomAtom);
