@@ -1,6 +1,6 @@
 import { Context, NarrowedContext, Telegraf } from 'telegraf';
 import dotenv from 'dotenv';
-import { Chat, ChatModel, Player, connectToDatabase } from 'shared';
+import { Chat, ChatModel, IdiomModel, Player, connectToDatabase } from 'shared';
 import { Update } from 'telegraf/types';
 import invariant from "tiny-invariant";
 import express from 'express';
@@ -56,12 +56,19 @@ async function createBot() {
 
       const startUrl = `${miniAppUrl}?startapp=${ctx.update.message.chat.id}`;
 
-      const chat = await ChatModel.findOne({ tg_id: ctx.update.message.chat.id });
+      const chat = await ChatModel.findOne({ tg_id: ctx.update.message.chat.id }).populate('players')
 
       if (!chat) {
         console.error('Chat not found', ctx.update.message.chat.id);
         logToAdmin(`On start: Chat not found: ${ctx.update.message.chat.id}`)
         ctx.reply('Sorry, something went wrong. Please try again later.');
+        return;
+      }
+
+      const alreadyInGame = chat.players.some(p => p.tg_id === ctx.update.message.from.id);
+
+      if (alreadyInGame) {
+        ctx.replyWithHTML(`You are already in the game. <a href="${startUrl}">Play</a>`);
         return;
       }
 
@@ -72,9 +79,7 @@ async function createBot() {
 
       await chat.save();
 
-      ctx.replyWithHTML(
-        `Great! Now you are in the game. <a href="${startUrl}">Play</a>`,
-      )
+      ctx.replyWithHTML(`Great! Now you are in the game. <a href="${startUrl}">Play</a>`)
     } catch (error) {
       console.error('Error handling start', error);
       const errorString = error && typeof error === 'object' && 'message' in error && typeof error.message === 'string' ? error.message : 'unknown';
@@ -82,9 +87,14 @@ async function createBot() {
     }
   });
 
-  bot.command('set_new_idiom', async (ctx) => {
+  bot.command('next', async (ctx) => {
     updateDailyIdiom(true)
     ctx.reply('Updating daily idiom...');
+  })
+
+  bot.command('reset_used', async (ctx) => {
+    await IdiomModel.updateMany({}, { used: false });
+    ctx.reply('All idioms have been reset');
   })
 
   bot.on('text', (ctx) => {
