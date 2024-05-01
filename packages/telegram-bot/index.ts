@@ -93,7 +93,7 @@ async function createBot() {
   })
 
   bot.command('reset_used', async (ctx) => {
-    await IdiomModel.updateMany({}, { used: false });
+    await IdiomModel.updateMany({}, { is_used: false });
     ctx.reply('All idioms have been reset');
   })
 
