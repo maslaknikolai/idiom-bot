@@ -1,6 +1,6 @@
 import { Context, NarrowedContext, Telegraf } from 'telegraf';
 import dotenv from 'dotenv';
-import { Chat, ChatModel, IdiomModel, Player, connectToDatabase } from 'shared';
+import { Chat, ChatModel, Idiom, IdiomModel, Player, connectToDatabase } from 'shared';
 import { Update } from 'telegraf/types';
 import invariant from "tiny-invariant";
 import express from 'express';
@@ -93,7 +93,7 @@ async function createBot() {
   })
 
   bot.command('reset_used', async (ctx) => {
-    await IdiomModel.updateMany({}, { is_used: false });
+    await IdiomModel.updateMany({}, { is_used: false } satisfies Partial<Idiom>);
     ctx.reply('All idioms have been reset');
   })
 

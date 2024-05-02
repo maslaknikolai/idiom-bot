@@ -1,4 +1,4 @@
-import { AppConfig, AppConfigModel, ChatModel, IdiomModel } from "shared";
+import { AppConfig, AppConfigModel, ChatModel, Idiom, IdiomModel } from "shared";
 import { logToAdmin } from "./logToAdmin";
 
 export async function updateDailyIdiom(forced = false) {
@@ -10,7 +10,7 @@ export async function updateDailyIdiom(forced = false) {
       return;
     }
 
-    const idiom = await IdiomModel.findOne({is_used: false})
+    const idiom = await IdiomModel.findOne({is_used: false} satisfies Partial<Idiom>)
 
     if (!idiom) {
       return handleError('No unused idiom found');

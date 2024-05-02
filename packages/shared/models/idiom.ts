@@ -10,7 +10,7 @@ const optionSchema = new mongoose.Schema<Option>({
   is_correct: { type: Boolean, required: true }
 });
 
-interface Idiom {
+export interface Idiom {
   text: string;
   image_url?: string;
   meaning_options: Option[];
